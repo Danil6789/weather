@@ -1,0 +1,237 @@
+# Weather Viewer - План разработки
+
+## 🎯 Milestone 1: Инфраструктура и настройка проекта
+
+### 1.1 Базовая структура и зависимости
+- [ ] Создать новый Spring Boot проект (Maven/Gradle)
+- [ ] Добавить зависимости в `pom.xml` / `build.gradle`:
+  - Spring Web
+  - Spring MVC
+  - Thymeleaf
+  - Spring Data JPA
+  - Flyway / Liquibase
+  - PostgreSQL Driver
+  - Spring Boot Starter Validation
+  - Lombok
+  - Spring Boot Starter Test
+  - Jackson (для работы с JSON)
+- [ ] Настроить структуру пакетов:
+  - `config`
+  - `controller`
+  - `service`
+  - `repository`
+  - `model` (entity)
+  - `dto`
+  - `exception`
+  - `util`
+
+### 1.2 База данных и миграции
+- [ ] Создать локальную базу данных PostgreSQL `weather_db`
+- [ ] Настроить `application.yml` для локального профиля (url, username, password, ddl-auto=validate)
+- [ ] Создать тестовый профиль для интеграционных тестов (in-memory H2 или отдельная schema)
+- [ ] **Flyway:** Создать миграцию `V1__create_users_table.sql`
+- [ ] **Flyway:** Создать миграцию `V2__create_sessions_table.sql`
+- [ ] **Flyway:** Создать миграцию `V3__create_locations_table.sql`
+- [ ] Запустить приложение и проверить, что таблицы создались
+
+### 1.3 Модели данных (Entities)
+- [ ] Создать Entity `User` (соответствует таблице Users)
+- [ ] Создать Entity `Session` (связь Many-to-One с User, ID типа UUID)
+- [ ] Создать Entity `Location` (связь Many-to-One с User)
+- [ ] Создать репозитории (JPA Repositories) для всех Entity
+- [ ] Добавить BCryptPasswordEncoder в конфигурацию Spring (`SecurityConfig` для кодирования паролей)
+
+### 1.4 Интеграция с OpenWeather API
+- [ ] Зарегистрироваться на OpenWeatherMap и получить API ключ
+- [ ] Добавить ключ в `application.yml` как `openweather.api.key`
+- [ ] Создать DTO для ответов от OpenWeather API:
+  - `GeocodingResponse` (для поиска локаций)
+  - `WeatherResponse` (для получения погоды по координатам)
+- [ ] Поэкспериментировать с API вручную (через Insomnia/IDEA HTTP Client)
+
+---
+
+## 🎯 Milestone 2: Модуль аутентификации (Сессии и Cookies)
+
+### 2.1 DTO и исключения для Auth
+- [ ] Создать `UserRegistrationDto` (login, password, confirmPassword) с валидацией
+- [ ] Создать `UserLoginDto` (login, password) с валидацией
+- [ ] Создать `UserResponseDto` (id, login)
+- [ ] Создать кастомные исключения:
+  - `UserAlreadyExistsException`
+  - `InvalidCredentialsException`
+  - `UserNotFoundException`
+  - `SessionNotFoundException` / `SessionExpiredException`
+- [ ] Создать `GlobalExceptionHandler` для обработки ошибок и возврата на страницы ошибок
+
+### 2.2 Бизнес-логика Auth
+- [ ] Создать `AuthService` (или `UserService` + `SessionService`)
+- [ ] Реализовать метод `register`:
+  - Проверка на уникальность login
+  - Проверка совпадения паролей
+  - Хэширование пароля через `BCryptPasswordEncoder`
+  - Сохранение пользователя в БД
+- [ ] Реализовать метод `login` (или `authenticate`):
+  - Поиск пользователя по логину
+  - Проверка пароля через `BCryptPasswordEncoder`
+  - Создание новой сессии (UUID) с `ExpiresAt = now + N часов`
+  - Сохранение сессии в БД
+  - **Возврат созданной сессии (объект Session)**
+- [ ] Реализовать метод `logout` (удаление сессии по ID)
+- [ ] Реализовать метод `getSession` (поиск сессии по ID и проверка, что она не истекла)
+
+### 2.3 Cookies и фильтры
+- [ ] Создать утилитарный класс `CookieUtil` для создания и чтения cookies
+- [ ] Создать интерфейс `SessionService` и его реализацию
+- [ ] **НЕ ИСПОЛЬЗОВАТЬ** стандартный `JSESSIONID`. Определить свое имя cookie, например `WEATHER_SESSION_ID`
+- [ ] Создать `SessionFilter` (или `AuthInterceptor`), который будет:
+  - Читать cookie `WEATHER_SESSION_ID` из запроса
+  - Валидировать сессию через `SessionService`
+  - Если сессия валидна, класть объект `User` в атрибуты запроса (чтобы достать в контроллере)
+  - Пропускать публичные страницы (главная, регистрация, логин) без сессии
+- [ ] Зарегистрировать фильтр/интерсептор в конфигурации Spring
+
+### 2.4 Контроллеры для Auth
+- [ ] Создать `AuthController`
+- [ ] `GET /signup` — отображение страницы регистрации
+- [ ] `POST /signup` — обработка формы регистрации. В случае успеха — редирект на `/login`
+- [ ] `GET /login` — отображение страницы логина
+- [ ] `POST /login` — обработка формы логина. В случае успеха — создание сессии, установка cookie `WEATHER_SESSION_ID` и редирект на главную (`/`)
+- [ ] `POST /logout` — удаление сессии из БД, удаление cookie (установка с maxAge=0) и редирект на главную
+
+### 2.5 Интеграционные тесты для Auth
+- [ ] Настроить тестовый профиль с отдельной БД (или Testcontainers)
+- [ ] Написать тесты для `AuthService`:
+  - Успешная регистрация нового пользователя (проверка, что запись появилась в БД)
+  - Регистрация с существующим логином -> `UserAlreadyExistsException`
+  - Успешный логин (проверка, что создалась сессия в БД)
+  - Логин с неверным паролем -> `InvalidCredentialsException`
+- [ ] Написать тесты для `SessionService`:
+  - Проверка истечения сессии
+
+---
+
+## 🎯 Milestone 3: Интеграция с OpenWeather API и бизнес-логика локаций
+
+### 3.1 Сервис для работы с OpenWeather
+- [ ] Создать `WeatherApiClient` (или `OpenWeatherService`)
+- [ ] Использовать `RestTemplate` или `WebClient` для HTTP запросов
+- [ ] Реализовать метод `searchLocations(String query)`:
+  - Формирование URL для Geocoding API (с API ключом)
+  - Выполнение GET запроса
+  - Десериализация JSON ответа в список `GeocodingResponse`
+  - Маппинг в свою модель `LocationDto` (или сразу в entity, но без user)
+- [ ] Реализовать метод `getWeatherForLocation(double lat, double lon)`:
+  - Формирование URL для Current Weather Data API
+  - Выполнение запроса
+  - Десериализация JSON в `WeatherResponse`
+  - Извлечение нужных данных (температура, описание, иконка)
+- [ ] Добавить обработку ошибок (статусы 4xx/5xx) и выбрасывать кастомное исключение `OpenWeatherApiException`
+
+### 3.2 Тестирование OpenWeather сервиса
+- [ ] Создать мок для HTTP клиента (например, Mockito)
+- [ ] Написать интеграционные тесты для `WeatherApiClient`:
+  - Мокаем HTTP ответ, возвращаем JSON-строку с примером локации
+  - Проверяем, что сервис правильно парсит ответ и возвращает список ожидаемых объектов
+  - Тест на ошибку (404, 500) -> проверка выброса `OpenWeatherApiException`
+
+### 3.3 Бизнес-логика для локаций пользователя
+- [ ] Создать `LocationService`
+- [ ] Реализовать метод `addLocationToUser(User user, String name, double lat, double lon)`:
+  - Создание и сохранение entity `Location`
+- [ ] Реализовать метод `getUserLocations(User user)`:
+  - Получение всех локаций пользователя из репозитория
+- [ ] Реализовать метод `deleteLocation(Long locationId, User user)`:
+  - Найти локацию, проверить, что она принадлежит пользователю, удалить
+- [ ] Создать кастомное исключение `LocationNotFoundException`
+
+---
+
+## 🎯 Milestone 4: Контроллеры и Thymeleaf шаблоны (UI)
+
+### 4.1 Подготовка фронтенда
+- [ ] Скопировать статические ресурсы (CSS, картинки) из готовой верстки в `src/main/resources/static`
+- [ ] Скопировать HTML макеты в `src/main/resources/templates`
+- [ ] Переименовать `.html` файлы (например, `home.html`, `search.html`, `login.html`, `register.html`)
+
+### 4.2 Главная страница
+- [ ] Создать `HomeController`
+- [ ] `GET /`:
+  - Проверить через `@SessionAttribute` или `HttpServletRequest` наличие аутентифицированного пользователя
+  - Если пользователь не аутентифицирован: вернуть `home.html` с кнопками регистрации/логина
+  - Если пользователь аутентифицирован:
+    - Получить его локации из `LocationService`
+    - Для каждой локации вызвать `OpenWeatherService` для получения текущей температуры
+    - Добавить список локаций с погодой в модель
+    - Вернуть `home.html` с отображением списка и логином пользователя
+- [ ] Адаптировать `home.html` под Thymeleaf:
+  - Заменить логин пользователя на `${user.login}` (если есть)
+  - Заменить кнопки регистрации/логина на `th:if`/`th:unless`
+  - Добавить `th:each` для отображения списка локаций
+  - Форма поиска должна вести на `GET /search`
+
+### 4.3 Страница поиска
+- [ ] Создать `SearchController`
+- [ ] `GET /search`:
+  - Получить параметр запроса `query` из формы поиска
+  - Если `query` пустой или null — вернуть пустой список
+  - Вызвать `weatherApiClient.searchLocations(query)`
+  - Добавить результат поиска (список найденных локаций) в модель
+  - Вернуть `search.html`
+- [ ] Адаптировать `search.html` под Thymeleaf:
+  - Поле ввода должно содержать предыдущий запрос (`${param.query}`)
+  - `th:each` для отображения списка найденных локаций
+  - Для каждой локации кнопка "Добавить", которая ведет на `POST /locations/add` с параметрами локации
+
+### 4.4 Контроллеры для управления локациями
+- [ ] Создать `LocationController`
+- [ ] `POST /locations/add`:
+  - Принять параметры локации (`name`, `lat`, `lon`)
+  - Получить текущего пользователя из сессии
+  - Вызвать `locationService.addLocationToUser(...)`
+  - Редирект на главную страницу (`redirect:/`)
+- [ ] `POST /locations/delete/{id}`:
+  - Получить ID локации из пути
+  - Получить текущего пользователя
+  - Вызвать `locationService.deleteLocation(id, user)`
+  - Редирект на главную
+
+---
+
+## 🎯 Milestone 5: Финальная полировка и деплой
+
+### 5.1 Обработка ошибок и валидация форм
+- [ ] Улучшить `GlobalExceptionHandler` для возврата кастомных страниц ошибок (404, 500)
+- [ ] Добавить отображение ошибок валидации на страницах логина и регистрации (через `BindingResult`)
+- [ ] Адаптировать страницы `login.html` и `register.html` под Thymeleaf с отображением ошибок
+
+### 5.2 Профили конфигурации
+- [ ] Создать `application-prod.yml` для продакшена (отдельные настройки БД, длительность сессии)
+- [ ] Вынести все чувствительные данные (пароль БД, API ключ) в переменные окружения
+
+### 5.3 Сборка и подготовка к деплою
+- [ ] Настроить сборку проекта в WAR-файл (изменить `packaging` в `pom.xml` на `war` и добавить SpringBootServletInitializer)
+- [ ] Убедиться, что приложение локально собирается без ошибок командой `mvn clean package`
+
+### 5.4 Деплой на удаленный сервер
+- [ ] Арендовать VPS (например, у Timeweb, Selectel и т.д.)
+- [ ] Установить на сервер: JRE, Tomcat, PostgreSQL
+- [ ] Создать БД и пользователя БД на сервере
+- [ ] Настроить Tomcat Manager для деплоя
+- [ ] Задеплоить WAR-файл через Tomcat Manager или скопировав в `webapps/`
+- [ ] Настроить переменные окружения для продакшн профиля
+- [ ] Проверить, что приложение доступно по `http://<server_ip>:8080/weather-app`
+
+---
+
+## 🎓 Что вы изучите в итоге
+
+- ✅ Ручная работа с сессиями и cookies (без Spring Security)
+- ✅ Интеграция со сторонним REST API (OpenWeatherMap)
+- ✅ Использование паттерна MVC со Spring MVC и Thymeleaf
+- ✅ Работа с базами данных через Spring Data JPA и Hibernate
+- ✅ Управление схемой БД с помощью миграций (Flyway/Liquibase)
+- ✅ Написание интеграционных тестов для сервисов
+- ✅ Обработка исключений и глобальное управление ошибками
+- ✅ Конфигурирование приложения под разные профили (dev/prod)
+- ✅ Деплой Java веб-приложения на удаленный Tomcat сервер

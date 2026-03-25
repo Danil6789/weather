@@ -19,7 +19,6 @@ import java.util.Properties;
 @PropertySource("classpath:application.properties")
 public class DatabaseConfig {
 
-
     @Value("${spring.db.url}")
     private String dbUrl;
 

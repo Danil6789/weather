@@ -45,17 +45,17 @@
   - TemplateResolver
   - TemplateEngine
   - ViewResolver
-- [ ] Создать SecurityConfig:
+- [✅] Создать SecurityConfig:
   - PasswordEncoder (BCrypt)
 
 ### 1.3 База данных и миграции
-- [ ] Создать локальную базу данных PostgreSQL weather_db
-- [ ] Настроить DataSource в DatabaseConfig (url, username, password)
+- [✅] Создать локальную базу данных PostgreSQL weather_db
+- [✅] Настроить DataSource в DatabaseConfig (url, username, password)
 - [ ] Создать тестовый профиль для интеграционных тестов (H2 in-memory)
-- [ ] Flyway: Создать миграцию V1__create_users_table.sql
-- [ ] Flyway: Создать миграцию V2__create_sessions_table.sql
-- [ ] Flyway: Создать миграцию V3__create_locations_table.sql
-- [ ] Создать FlywayConfig для запуска миграций при старте
+- [✅] Flyway: Создать миграцию V1__create_users_table.sql
+- [✅] Flyway: Создать миграцию V2__create_sessions_table.sql
+- [✅] Flyway: Создать миграцию V3__create_locations_table.sql
+- [✅] Создать FlywayConfig для запуска миграций при старте
 - [ ] Собрать WAR и проверить, что таблицы создались при деплое
 
 ### 1.4 Модели данных (Entities)
@@ -66,24 +66,24 @@
   - UserRepository (с методами: findById, findByLogin, save, update)
   - SessionRepository (с методами: save, delete, findById, deleteExpired)
   - LocationRepository (с методами: findByUserId, save, delete, findByIdAndUserId)
-- [ ] Добавить BCryptPasswordEncoder в SecurityConfig
+- [✅] Добавить BCryptPasswordEncoder в SecurityConfig
 
 ### 1.5 Интеграция с OpenWeather API
-- [ ] Зарегистрироваться на OpenWeatherMap и получить API ключ
-- [ ] Добавить ключ в отдельный config.properties или переменные окружения
-- [ ] Создать DTO для ответов от OpenWeather API:
+- [✅] Зарегистрироваться на OpenWeatherMap и получить API ключ
+- [✅] Добавить ключ в отдельный config.properties или переменные окружения
+- [✅] Создать DTO для ответов от OpenWeather API:
   - GeocodingResponse (для поиска локаций)
   - WeatherResponse (для получения погоды по координатам)
 - [ ] Создать RestTemplate бин в AppConfig
-- [ ] Поэкспериментировать с API вручную (через Insomnia/IDEA HTTP Client)
+- [✅] Поэкспериментировать с API вручную (через Insomnia/IDEA HTTP Client)
 
 ---
 
 ## 🎯 Milestone 2: Модуль аутентификации (Сессии и Cookies)
 
 ### 2.1 DTO и исключения для Auth
-- [ ] Создать UserRegistrationDto (login, password, confirmPassword) с валидацией
-- [ ] Создать UserLoginDto (login, password) с валидацией
+- [✅] Создать UserRegistrationDto (login, password, confirmPassword) с валидацией
+- [✅] Создать UserLoginDto (login, password) с валидацией
 - [ ] Создать кастомные исключения:
   - UserAlreadyExistsException
   - InvalidCredentialsException
@@ -92,7 +92,7 @@
 - [ ] Создать GlobalExceptionHandler с `@ControllerAdvice`
 
 ### 2.2 Бизнес-логика Auth
-- [ ] Создать UserService:
+- [✅] Создать UserService:
   - register() - проверка уникальности, хэширование пароля
   - findByLogin() - поиск пользователя
   - checkPassword() - проверка пароля

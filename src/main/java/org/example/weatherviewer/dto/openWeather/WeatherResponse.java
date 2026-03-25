@@ -13,36 +13,35 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherResponse {
+    private String name;
 
-    private String name;  // название города
+    private Main main;
 
-    private Main main;    // основная информация
+    private List<Weather> weather;
 
-    private List<Weather> weather;  // описание погоды
-
-    private Wind wind;     // ветер
+    private Wind wind;
 
     @Data
     @NoArgsConstructor
     public static class Main {
-        private BigDecimal temp;      // температура
+        private BigDecimal temp;
         @JsonProperty("feels_like")
-        private BigDecimal feelsLike; // ощущается как
-        private Integer humidity;      // влажность
-        private Integer pressure;      // давление
+        private BigDecimal feelsLike;
+        private Integer humidity;
+        private Integer pressure;
     }
 
     @Data
     @NoArgsConstructor
     public static class Weather {
-        private String main;        // группа (Rain, Clear, Clouds)
-        private String description; // описание
-        private String icon;        // иконка
+        private String main;
+        private String description;
+        private String icon;
     }
 
     @Data
     @NoArgsConstructor
     public static class Wind {
-        private BigDecimal speed;   // скорость ветра
+        private BigDecimal speed;
     }
 }

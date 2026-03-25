@@ -13,7 +13,6 @@ repositories {
 dependencies {
     implementation 'org.springframework:spring-webmvc:6.1.4'
     implementation 'org.springframework:spring-orm:6.1.4'
-    implementation 'org.springframework.data:spring-data-jpa:3.2.4'
 
     implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
 

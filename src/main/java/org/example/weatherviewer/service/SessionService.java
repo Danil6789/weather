@@ -36,4 +36,10 @@ public class SessionService {
 
         sessionRepository.delete(session);
     }
+
+    @Transactional(readOnly = true)
+    public User getUserBySessionId(UUID sessionId) {
+        return sessionRepository.getUserBySessionId(sessionId)
+                .orElseThrow(() -> new SessionNotFoundException("Session not found"));
+    }
 }

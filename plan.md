@@ -96,14 +96,12 @@
   - register() - проверка уникальности, хэширование пароля
   - findByLogin() - поиск пользователя
   - checkPassword() - проверка пароля
-- [ ] Создать SessionService:
+- [✅] Создать SessionService:
   - createSession() - создание сессии с UUID и expiresAt
   - deleteSession() - удаление сессии
-  - getUserBySessionId() - валидация и получение пользователя
-  - cleanExpiredSessions() - периодическая чистка (`@Scheduled`)
 
 ### 2.3 Cookies и фильтры
-- [ ] Создать CookieUtil для работы с cookies:
+- [✅] Создать CookieUtil для работы с cookies:
   - setSessionCookie() - установка cookie
   - deleteSessionCookie() - удаление cookie
   - getSessionIdFromCookie() - чтение cookie
@@ -116,7 +114,7 @@
 - [ ] Зарегистрировать фильтр в WebAppInitializer или через FilterRegistrationBean
 
 ### 2.4 Контроллеры для Auth
-- [ ] Создать AuthController:
+- [✅] Создать AuthController:
   - GET /login — страница логина
   - GET /register — страница регистрации
   - POST /register — обработка регистрации

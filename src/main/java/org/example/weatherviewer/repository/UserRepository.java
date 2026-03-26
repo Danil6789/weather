@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class UserRepository {
@@ -13,20 +14,20 @@ public class UserRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void save(User user){
+    public void save(User user) {
         sessionFactory.getCurrentSession().persist(user);
 
 
     }
 
-    public Optional<User> findByLogin(String login){
+    public Optional<User> findByLogin(String login) {
         return sessionFactory.getCurrentSession().
-                createQuery("From User WHERE login = :login",User.class)
+                createQuery("From User WHERE login = :login", User.class)
                 .setParameter("login", login)
                 .uniqueResultOptional();
     }
 
-    public void update(User user){
+    public void update(User user) {
         sessionFactory.getCurrentSession().merge(user);
     }
 }

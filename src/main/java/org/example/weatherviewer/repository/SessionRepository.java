@@ -1,5 +1,6 @@
 package org.example.weatherviewer.repository;
 
+import org.example.weatherviewer.entity.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,5 +32,12 @@ public class SessionRepository {
         return sessionFactory.getCurrentSession()
                 .createMutationQuery("DELETE FROM Session WHERE expires_at < :now")
                 .setParameter("now", now).executeUpdate();
+    }
+
+    public Optional<User> getUserBySessionId(UUID sessionId) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("SELECT s.user FROM Session s WHERE s.id = :sessionId", User.class)
+                .setParameter("sessionId", sessionId)
+                .uniqueResultOptional();
     }
 }

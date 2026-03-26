@@ -48,7 +48,6 @@ public class SessionFilter extends OncePerRequestFilter {
         }
 
         try {
-            // Валидируем сессию и кладем пользователя в request
             request.setAttribute("user",
                     sessionService.getUserBySessionId(UUID.fromString(sessionId)));
             filterChain.doFilter(request, response);

@@ -106,7 +106,7 @@
   - deleteSessionCookie() - удаление cookie
   - getSessionIdFromCookie() - чтение cookie
   - **НЕ ИСПОЛЬЗОВАТЬ** стандартный JSESSIONID. Использовать SESSION_ID
-- [ ] Создать SessionFilter (extends OncePerRequestFilter):
+- [✅] Создать SessionFilter (extends OncePerRequestFilter):
   - Читать cookie SESSION_ID из запроса
   - Валидировать сессию через SessionService
   - Класть объект User в request атрибуты

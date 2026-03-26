@@ -1,5 +1,8 @@
 package org.example.weatherviewer.dto.auth;
 
-public class UserResponse {
+import lombok.Data;
+
+@Data
+public class UserViewDto {
     private String login;
 }

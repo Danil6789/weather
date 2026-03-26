@@ -3,7 +3,7 @@ package org.example.weatherviewer.service;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
-import org.example.weatherviewer.dto.auth.UserResponse;
+import org.example.weatherviewer.dto.auth.UserDto;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.InvalidCredentialsException;
 import org.example.weatherviewer.mapper.UserMapper;
@@ -16,21 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserResponse register(UserRegisterDto userDto){
+    public User createUser(UserRegisterDto userDto){
         User user = userMapper.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        return userMapper.toDto(user);
+        return user;
     }
 
     @Transactional(readOnly = true)
-    public UserResponse login(UserLoginDto userDto){
+    public User getUserByLogin(UserLoginDto userDto){
         User user = userRepository.findByLogin(userDto.getLogin())
                 .orElseThrow(() -> new InvalidCredentialsException("Логин или пароль не совпадают"));
 
@@ -38,6 +38,6 @@ public class UserService {
             throw new InvalidCredentialsException("Логин или пароль не совпадают");
         }
 
-        return userMapper.toDto(user);
+        return user;
     }
 }

@@ -1,24 +1,31 @@
 package org.example.weatherviewer.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.entity.User;
+import org.example.weatherviewer.exception.DatabaseException;
+import org.example.weatherviewer.exception.UserAlreadyExistsException;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public void save(User user) {
-        sessionFactory.getCurrentSession().persist(user);
-
-
+        try {
+            sessionFactory.getCurrentSession().persist(user);
+        }catch (ConstraintViolationException e){
+            throw new UserAlreadyExistsException("Пользователь с таким логином уже существует");
+        }
+        catch (HibernateException e){
+            throw new DatabaseException("Ошибка в бд", e);
+        }
     }
 
     public Optional<User> findByLogin(String login) {

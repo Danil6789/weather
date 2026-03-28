@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.UUID;
-
 
 @RequiredArgsConstructor
 @Controller
@@ -34,6 +32,8 @@ public class AuthController {
     public String registerPage() {
         return "register";
     }
+
+
 
     @PostMapping("/register")
     public String register(

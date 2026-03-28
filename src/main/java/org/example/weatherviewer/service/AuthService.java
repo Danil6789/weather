@@ -10,7 +10,6 @@ import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.mapper.SessionMapper;
 import org.example.weatherviewer.mapper.UserMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 @Service
@@ -29,7 +28,6 @@ public class AuthService {
     public SessionDto login(UserLoginDto userLoginDto){
         User user = userService.getUserByLogin(userLoginDto);
         Session session = sessionService.createSession(user);
-
         return sessionMapper.toDto(session);
     }
 

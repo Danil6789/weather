@@ -5,7 +5,7 @@ import org.example.weatherviewer.dto.auth.UserDto;
 import org.example.weatherviewer.entity.User;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
     User toEntity(UserRegisterDto request);
 

@@ -17,6 +17,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
+@Profile("!test")
 public class DatabaseConfig {
 
     @Value("${spring.db.url}")
@@ -29,7 +30,6 @@ public class DatabaseConfig {
     private String dbPassword;
 
     @Bean
-    @Profile("!test")
     public DataSource prodDataSource() {
         HikariDataSource ds = new HikariDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
@@ -40,33 +40,9 @@ public class DatabaseConfig {
         return ds;
     }
 
-    @Bean
-    @Profile("test")
-    public DataSource testDataSource() {
-        HikariDataSource ds = new HikariDataSource();
-        ds.setDriverClassName("org.h2.Driver");
-        ds.setJdbcUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
-        ds.setUsername("sa");
-        ds.setPassword("");
-        ds.setMaximumPoolSize(2);
-        return ds;
-    }
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setPackagesToScan("org.example.weatherviewer.entity");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        return sessionFactory;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        return new HibernateTransactionManager(sessionFactory);
-    }
-
-    private Properties hibernateProperties() {
+    @Bean(name = "hibernateProperties")
+    public Properties hibernateProperties() {
         Properties props = new Properties();
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.setProperty("hibernate.show_sql", "true");

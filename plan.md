@@ -111,7 +111,7 @@
   - Валидировать сессию через SessionService
   - Класть объект User в request атрибуты
   - Пропускать публичные страницы (/login, /register, /css/*, /js/*)
-- [ ] Зарегистрировать фильтр в WebAppInitializer или через FilterRegistrationBean
+- [✅] Зарегистрировать фильтр в WebAppInitializer или через FilterRegistrationBean
 
 ### 2.4 Контроллеры для Auth
 - [✅] Создать AuthController:
@@ -148,11 +148,11 @@
   - Ошибка API -> OpenWeatherApiException
 
 ### 3.3 Бизнес-логика для локаций пользователя
-- [ ] Создать LocationService:
+- [✅] Создать LocationService:
   - addLocation() - добавление локации пользователю
   - getUserLocations() - список локаций пользователя
   - deleteLocation() - удаление с проверкой владельца
-- [ ] Создать исключение LocationNotFoundException
+- [✅] Создать исключение LocationNotFoundException
 
 ---
 

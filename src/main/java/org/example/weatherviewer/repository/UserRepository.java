@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,5 +30,10 @@ public class UserRepository {
 
     public void update(User user) {
         sessionFactory.getCurrentSession().merge(user);
+    }
+
+    public List<User> findAll(){
+        return sessionFactory.getCurrentSession().createQuery("FROM User", User.class)
+                .getResultList();
     }
 }

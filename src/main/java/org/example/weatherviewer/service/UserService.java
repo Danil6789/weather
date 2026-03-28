@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -20,8 +22,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createUser(UserRegisterDto userDto){
-        User user = userMapper.toEntity(userDto);
+    public User createUser(UserRegisterDto userRegisterDto){
+        User user = userMapper.toEntity(userRegisterDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
@@ -29,14 +31,19 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getUserByLogin(UserLoginDto userDto){
-        User user = userRepository.findByLogin(userDto.getLogin())
+    public User getUserByLogin(UserLoginDto userLoginDto){
+        User user = userRepository.findByLogin(userLoginDto.getLogin())
                 .orElseThrow(() -> new InvalidCredentialsException("Логин или пароль не совпадают"));
 
-        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Логин или пароль не совпадают");
         }
 
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getAll(){
+        return userRepository.findAll();
     }
 }

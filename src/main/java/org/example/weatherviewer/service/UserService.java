@@ -32,14 +32,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUserByLogin(UserLoginDto userLoginDto){
-        User user = userRepository.findByLogin(userLoginDto.getLogin())
+        return userRepository.findByLogin(userLoginDto.getLogin())
                 .orElseThrow(() -> new InvalidCredentialsException("Логин или пароль не совпадают"));
+    }
 
-        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+    public void checkPassword(String rawPassword, String encodedPassword){
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new InvalidCredentialsException("Логин или пароль не совпадают");
         }
-
-        return user;
     }
 
     @Transactional(readOnly = true)

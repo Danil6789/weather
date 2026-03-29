@@ -34,10 +34,7 @@
         @Test
         @DisplayName("Проверяет, что User создался в бд при корректных данных")
         void createUser_validCredentials_returnUser(){
-            UserRegisterDto userDto = new UserRegisterDto();
-            userDto.setLogin("spider-man");
-            userDto.setPassword("peter-parker");
-            userDto.setConfirmPassword("peter-parker");
+            UserRegisterDto userDto = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
             User user = userService.createUser(userDto);
 
             assertNotNull(user);
@@ -54,8 +51,8 @@
         void createUser_dublicateLogin_returnException(){
             UserRegisterDto userDto1 = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
             UserRegisterDto userDto2 = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
-
             userService.createUser(userDto1);
+
             assertThrows(UserAlreadyExistsException.class, () -> {
                 userService.createUser(userDto2);
             });

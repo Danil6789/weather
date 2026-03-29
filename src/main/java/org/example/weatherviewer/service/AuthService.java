@@ -22,6 +22,7 @@ public class AuthService {
 
     public UserDto register(UserRegisterDto userRegisterDto){
         User user = userService.createUser(userRegisterDto);
+        userService.checkPassword(userRegisterDto.getPassword(), user.getPassword());
         return userMapper.toDto(user);
     }
 

@@ -31,15 +31,15 @@ public class SessionService {
 
     @Transactional
     public void deleteSession(UUID sessionId) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new SessionNotFoundException("Session not found: " + sessionId));
-
-        sessionRepository.delete(session);
+        int line = sessionRepository.deleteById(sessionId);
+        //TODO: мб нужно проверку сколько удалилось строк сделать
     }
 
     @Transactional(readOnly = true)
     public User getUserBySessionId(UUID sessionId) {
-        return sessionRepository.getUserBySessionId(sessionId)
+        return sessionRepository.findBySessionId(sessionId)
                 .orElseThrow(() -> new SessionNotFoundException("Session not found"));
     }
+
+    //TODO: нужно сделать метод планировщик с @Schedule для автоматическогого удаления зомби-сессии
 }

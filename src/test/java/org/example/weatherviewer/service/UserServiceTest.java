@@ -90,7 +90,7 @@
         @DisplayName("Проверяем, что, при несуществующем логине, возвращается ошибка UserNotFoundException")
         void getUserByLogin_notFoundLogin_returnException(){
             UserRegisterDto userDto = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
-            User user = userService.createUser(userDto);
+            userService.createUser(userDto);
 
             assertThrows(UserNotFoundException.class, () -> {
                 userService.getUserByLogin("venom");

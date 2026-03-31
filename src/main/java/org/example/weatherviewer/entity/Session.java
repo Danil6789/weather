@@ -11,6 +11,7 @@ import java.util.UUID;
 @Table(name = "sessions")
 public class Session {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private UUID id;
 

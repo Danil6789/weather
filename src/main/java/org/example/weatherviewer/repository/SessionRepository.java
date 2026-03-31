@@ -20,8 +20,12 @@ public class SessionRepository {
         sessionFactory.getCurrentSession().persist(session);
     }
 
-    public void delete(Session session){
-        sessionFactory.getCurrentSession().remove(session);
+    public int deleteById(UUID sessionId) {
+
+        return sessionFactory.getCurrentSession()
+                .createMutationQuery("DELETE FROM Session WHERE id = :id")
+                .setParameter("id", sessionId)
+                .executeUpdate();
     }
 
     public Optional<Session> findById(UUID id){
@@ -34,7 +38,7 @@ public class SessionRepository {
                 .setParameter("now", now).executeUpdate();
     }
 
-    public Optional<User> getUserBySessionId(UUID sessionId) {
+    public Optional<User> findBySessionId(UUID sessionId) {
         return sessionFactory.getCurrentSession()
                 .createQuery("SELECT s.user FROM Session s WHERE s.id = :sessionId", User.class)
                 .setParameter("sessionId", sessionId)

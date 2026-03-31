@@ -3,7 +3,9 @@
     import org.example.weatherviewer.config.TestAppConfig;
     import org.example.weatherviewer.dto.auth.UserRegisterDto;
     import org.example.weatherviewer.entity.User;
+    import org.example.weatherviewer.exception.InvalidCredentialsException;
     import org.example.weatherviewer.exception.UserAlreadyExistsException;
+    import org.example.weatherviewer.exception.UserNotFoundException;
     import org.example.weatherviewer.repository.UserRepository;
     import org.junit.jupiter.api.DisplayName;
     import org.junit.jupiter.api.Test;
@@ -55,6 +57,43 @@
 
             assertThrows(UserAlreadyExistsException.class, () -> {
                 userService.createUser(userDto2);
+            });
+        }
+
+        @Test
+        @DisplayName("Проверяем, что при корректных данных, пользователь возвращается")
+        void getUserByLogin_validCredentials_returnUser(){
+            UserRegisterDto userDto = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
+            User user = userService.createUser(userDto);
+
+            User foundUser = userService.getUserByLogin(userDto.getLogin());
+
+            assertNotNull(foundUser);
+            assertEquals(foundUser.getId(), user.getId());
+            assertEquals(foundUser.getLogin(), user.getLogin());
+        }
+
+        @Test
+        @DisplayName("Проверяем, что при несовпадении пароля при входе, возвращается ошибка")
+        void getUserByLogin_invalidConfirmPassword_returnException(){
+            UserRegisterDto userDto = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
+            User user = userService.createUser(userDto);
+
+            User foundUser = userService.getUserByLogin(userDto.getLogin());
+
+            assertThrows(InvalidCredentialsException.class, () -> {
+                userService.checkPassword(user.getPassword(), foundUser.getPassword());
+            });
+        }
+
+        @Test
+        @DisplayName("Проверяем, что, при несуществующем логине, возвращается ошибка UserNotFoundException")
+        void getUserByLogin_notFoundLogin_returnException(){
+            UserRegisterDto userDto = new UserRegisterDto("spider-man", "peter-parker", "peter-parker");
+            User user = userService.createUser(userDto);
+
+            assertThrows(UserNotFoundException.class, () -> {
+                userService.getUserByLogin("venom");
             });
         }
     }

@@ -22,12 +22,12 @@ public class AuthService {
 
     public UserDto register(UserRegisterDto userRegisterDto){
         User user = userService.createUser(userRegisterDto);
-        userService.checkPassword(userRegisterDto.getPassword(), user.getPassword());
         return userMapper.toDto(user);
     }
 
     public SessionDto login(UserLoginDto userLoginDto){
-        User user = userService.getUserByLogin(userLoginDto);
+        User user = userService.getUserByLogin(userLoginDto.getLogin());
+        userService.checkPassword(userLoginDto.getPassword(), user.getPassword());
         Session session = sessionService.createSession(user);
         return sessionMapper.toDto(session);
     }

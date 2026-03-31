@@ -5,6 +5,7 @@ import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.InvalidCredentialsException;
+import org.example.weatherviewer.exception.UserNotFoundException;
 import org.example.weatherviewer.mapper.UserMapper;
 import org.example.weatherviewer.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,14 +32,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getUserByLogin(UserLoginDto userLoginDto){
-        return userRepository.findByLogin(userLoginDto.getLogin())
-                .orElseThrow(() -> new InvalidCredentialsException("Логин или пароль не совпадают"));
+    public User getUserByLogin(String login){
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new UserNotFoundException("Нет такого логина"));
     }
 
     public void checkPassword(String rawPassword, String encodedPassword){
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new InvalidCredentialsException("Логин или пароль не совпадают");
+            throw new InvalidCredentialsException("пароль не совпадает");
         }
     }
 

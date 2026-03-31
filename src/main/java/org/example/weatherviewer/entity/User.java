@@ -31,5 +31,4 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Session> sessions;
-
 }

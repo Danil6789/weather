@@ -6,6 +6,7 @@ import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.SessionNotFoundException;
 import org.example.weatherviewer.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,10 @@ public class SessionService {
     @Transactional
     public void deleteSession(UUID sessionId) {
         int line = sessionRepository.deleteById(sessionId);
-        //TODO: мб нужно проверку сколько удалилось строк сделать
+
+        if(line == 0){
+            throw new SessionNotFoundException("Session not found by delete");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -41,5 +45,11 @@ public class SessionService {
                 .orElseThrow(() -> new SessionNotFoundException("Session not found"));
     }
 
-    //TODO: нужно сделать метод планировщик с @Schedule для автоматическогого удаления зомби-сессии
+    @Transactional
+    @Scheduled(fixedRateString = "#{${session.timeout.hours:2}*3600000}")
+    public void cleanupExpiredSession(){
+        LocalDateTime now = LocalDateTime.now();
+        int line = sessionRepository.deleteByExpiresAtBefore(now);
+    }
+
 }

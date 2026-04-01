@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CookieUtil {
 
-    private static final String COOKIE_NAME = "SESSION_ID";
+    @Value("${session.cookie.id}")
+    private String COOKIE_NAME = "SESSION_ID";
 
     @Value("${session.timeout.hours:24}")
     private int sessionTimeoutHours;

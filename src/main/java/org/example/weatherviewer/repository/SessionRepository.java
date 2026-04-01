@@ -21,11 +21,12 @@ public class SessionRepository {
     }
 
     public int deleteById(UUID sessionId) {
-
-        return sessionFactory.getCurrentSession()
+        int result = sessionFactory.getCurrentSession()
                 .createMutationQuery("DELETE FROM Session WHERE id = :id")
                 .setParameter("id", sessionId)
                 .executeUpdate();
+
+        return result;
     }
 
     public Optional<Session> findById(UUID id){
@@ -38,10 +39,16 @@ public class SessionRepository {
                 .setParameter("now", now).executeUpdate();
     }
 
-    public Optional<User> findBySessionId(UUID sessionId) {
+    public Optional<Session> findBySessionId(UUID sessionId) {
         return sessionFactory.getCurrentSession()
-                .createQuery("SELECT s.user FROM Session s WHERE s.id = :sessionId", User.class)
+                .createQuery("FROM Session s WHERE s.id = :sessionId", Session.class)
                 .setParameter("sessionId", sessionId)
                 .uniqueResultOptional();
+    }
+
+
+    public void clearCash() {
+        sessionFactory.getCurrentSession().flush();
+        sessionFactory.getCurrentSession().clear();
     }
 }

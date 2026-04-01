@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.entity.User;
-import org.example.weatherviewer.exception.SessionNotFoundException;
 import org.example.weatherviewer.service.SessionService;
 import org.example.weatherviewer.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;

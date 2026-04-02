@@ -22,6 +22,6 @@ public class WeatherController {
         model.addAttribute("locations", locations);
         model.addAttribute("queryName", query);
 
-        return "search.html";
+        return "search";
     }
 }

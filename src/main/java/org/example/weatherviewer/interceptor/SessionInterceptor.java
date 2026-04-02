@@ -4,7 +4,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.weatherviewer.entity.User;
+import org.example.weatherviewer.dto.auth.UserSessionDto;
+import org.example.weatherviewer.mapper.UserMapper;
 import org.example.weatherviewer.service.SessionService;
 import org.example.weatherviewer.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class SessionInterceptor implements HandlerInterceptor {
     private final SessionService sessionService;
     private final CookieUtil cookieUtil;
+    private final UserMapper userMapper;
 
     @Value("${session.cookie.id}")
     private String COOKIE_NAME;
@@ -35,8 +37,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                 .ifPresent(cookie -> {
                     try {
                         UUID sessionId = UUID.fromString(cookie.getValue());
-                        User user = sessionService.getUserBySessionId(sessionId);
-                        request.setAttribute("user", user);
+                        UserSessionDto userSessionDto = userMapper.toUserSessionDto(sessionService.getUserBySessionId(sessionId));
+                        request.setAttribute("user", userSessionDto);
                     } catch (Exception e) {
                         cookieUtil.deleteSessionCookie(response);
                     }

@@ -1,4 +1,4 @@
-package org.example.weatherviewer.dto.openWeather;
+package org.example.weatherviewer.dto.weather;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

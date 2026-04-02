@@ -40,7 +40,6 @@ public class DatabaseConfig {
         return ds;
     }
 
-
     @Bean(name = "hibernateProperties")
     public Properties hibernateProperties() {
         Properties props = new Properties();

@@ -84,7 +84,7 @@
 ### 2.1 DTO и исключения для Auth
 - [✅] Создать UserRegistrationDto (login, password, confirmPassword) с валидацией
 - [✅] Создать UserLoginDto (login, password) с валидацией
-- [ ] Создать кастомные исключения:
+- [] Создать кастомные исключения:
   - UserAlreadyExistsException
   - InvalidCredentialsException
   - UserNotFoundException
@@ -122,11 +122,11 @@
   - POST /logout — удаление сессии, удаление cookie
 
 ### 2.5 Интеграционные тесты для Auth
-- [ ] Настроить тестовый профиль с H2 in-memory
-- [ ] Написать тесты для UserService:
+- [✅] Настроить тестовый профиль с H2 in-memory
+- [✅] Написать тесты для UserService:
   - Успешная регистрация
   - Регистрация с существующим логином -> исключение
-- [ ] Написать тесты для SessionService:
+- [✅] Написать тесты для SessionService:
   - Успешное создание сессии
   - Проверка истечения сессии
 

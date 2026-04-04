@@ -23,6 +23,7 @@ public class WeatherResponse {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Main {
         private BigDecimal temp;
         @JsonProperty("feels_like")
@@ -33,6 +34,7 @@ public class WeatherResponse {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Weather {
         private String main;
         private String description;
@@ -41,6 +43,7 @@ public class WeatherResponse {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Wind {
         private BigDecimal speed;
     }

@@ -15,7 +15,7 @@ public class SessionRepository { //TODO: Сделать общий класс д
     @Autowired
     private SessionFactory sessionFactory; //TODO: подумать мб нужно сделать через entityManager
 
-    public void save(Session session){
+    public void save(Session session){ //TODO: нужно ли чтоб возвращал User, а не void
         sessionFactory.getCurrentSession().persist(session);
     }
 

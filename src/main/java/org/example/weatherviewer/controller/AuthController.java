@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.auth.SessionDto;
 import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
-import org.example.weatherviewer.service.AuthService;
+import org.example.weatherviewer.service.auth.AuthService;
 import org.example.weatherviewer.util.CookieUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

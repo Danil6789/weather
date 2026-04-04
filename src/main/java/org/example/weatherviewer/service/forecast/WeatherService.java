@@ -1,4 +1,4 @@
-package org.example.weatherviewer.service;
+package org.example.weatherviewer.service.forecast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

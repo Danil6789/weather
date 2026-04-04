@@ -1,7 +1,6 @@
-package org.example.weatherviewer.service;
+package org.example.weatherviewer.service.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.InvalidCredentialsException;

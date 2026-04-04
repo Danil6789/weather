@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.auth.UserSessionDto;
 import org.example.weatherviewer.mapper.UserMapper;
-import org.example.weatherviewer.service.SessionService;
+import org.example.weatherviewer.service.auth.SessionService;
 import org.example.weatherviewer.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

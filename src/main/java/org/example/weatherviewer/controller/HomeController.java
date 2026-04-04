@@ -3,7 +3,7 @@ package org.example.weatherviewer.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.auth.UserSessionDto;
 import org.example.weatherviewer.dto.forecast.ForecastDto;
-import org.example.weatherviewer.service.ForecastService;
+import org.example.weatherviewer.service.forecast.ForecastService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package org.example.weatherviewer.service;
+package org.example.weatherviewer.service.forecast;
 
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.forecast.ForecastDto;

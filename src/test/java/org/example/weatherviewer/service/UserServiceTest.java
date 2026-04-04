@@ -7,6 +7,7 @@
     import org.example.weatherviewer.exception.UserAlreadyExistsException;
     import org.example.weatherviewer.exception.UserNotFoundException;
     import org.example.weatherviewer.repository.UserRepository;
+    import org.example.weatherviewer.service.auth.UserService;
     import org.junit.jupiter.api.DisplayName;
     import org.junit.jupiter.api.Test;
     import org.junit.jupiter.api.extension.ExtendWith;

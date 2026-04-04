@@ -1,6 +1,5 @@
 package org.example.weatherviewer.repository;
 
-import org.example.weatherviewer.entity.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,10 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class SessionRepository {
+public class SessionRepository { //TODO: Сделать общий класс допустим CrudRepository в котором будет добавлено sessionFactory/entityManager и какие-то общие методы по типу T save(T entity);
 
     @Autowired
-    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory; //TODO: подумать мб нужно сделать через entityManager
 
     public void save(Session session){
         sessionFactory.getCurrentSession().persist(session);

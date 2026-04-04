@@ -9,11 +9,13 @@ import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.service.AuthService;
 import org.example.weatherviewer.util.CookieUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -24,25 +26,24 @@ public class AuthController {
     private final CookieUtil cookieUtil;
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Model model) {
+        model.addAttribute("loginDto", new UserLoginDto());
         return "login";
     }
 
     @GetMapping("/register")
-    public String registerPage() {
+    public String registerPage(Model model) {
+        model.addAttribute("userRegisterDto", new UserRegisterDto());
         return "register";
     }
 
-
-
     @PostMapping("/register")
-    public String register(
-            @Valid UserRegisterDto userRegisterDto, BindingResult bindingResult
-    ){
-        if(bindingResult.hasErrors()){
+    public String register(@Valid UserRegisterDto userRegisterDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "register";
         }
         authService.register(userRegisterDto);
+
         return "redirect:/";
     }
 

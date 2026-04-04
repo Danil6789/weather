@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="navbar" class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <!-- Логотип и название -->
+        <a class="navbar-brand" href="/">
+            <img src="/images/weather-app.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Weather Tracker
+        </a>
+
+        <form action="/search" method="get" class="d-flex mx-auto" style="width: 300px;">
+            <div class="input-group">
+                <input class="form-control form-control-sm" type="text" name="query" placeholder="Enter location" required>
+                <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+            </div>
+        </form>
+
+        <div class="d-flex align-items-center">
+            <div th:if="${user != null}">
+                <span class="navbar-text me-3" th:text="${user.login}">User</span>
+                <form method="post" action="/auth/logout" class="d-inline">
+                    <button class="btn btn-outline-danger btn-sm">Sign out</button>
+                </form>
+            </div>
+            <div th:unless="${user != null}">
+                <a href="/auth/login" class="btn btn-outline-primary btn-sm me-2">Sign in</a>
+                <a href="/auth/register" class="btn btn-primary btn-sm">Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+</html>

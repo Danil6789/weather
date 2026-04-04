@@ -17,7 +17,7 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/search")
-    public String searchLocations(@RequestParam String query, Model model) throws IOException {
+    public String searchLocations(@RequestParam("query") String query, Model model) throws IOException {
         List<GeocodingResponse> locations = weatherService.searchLocations(query);
         model.addAttribute("locations", locations);
         model.addAttribute("queryName", query);

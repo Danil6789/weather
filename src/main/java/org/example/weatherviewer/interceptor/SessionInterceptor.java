@@ -27,6 +27,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        System.out.println(">>> SessionInterceptor works for: " + request.getRequestURI());
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return true;

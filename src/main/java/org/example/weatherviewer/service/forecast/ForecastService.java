@@ -6,6 +6,7 @@ import org.example.weatherviewer.dto.location.LocationDto;
 import org.example.weatherviewer.dto.weather.WeatherResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +19,12 @@ public class ForecastService {
     public List<ForecastDto> getUserForecasts(Long userId) {
         List<LocationDto> locations = locationService.getUserLocations(userId);
 
-        return locations.stream().map(location -> {
-            WeatherResponse weather = weatherService.getWeather(location.getLatitude(), location.getLongitude());
-            return new ForecastDto(location.getId(), weather);
-        }).collect(Collectors.toList());
+        return locations.stream()
+                .sorted(Comparator.comparing(LocationDto::getId).reversed())
+                .map(location -> {
+                    WeatherResponse weather = weatherService.getWeather(location.getLatitude(), location.getLongitude());
+                    return new ForecastDto(location.getId(), weather);
+                })
+                .collect(Collectors.toList());
     }
 }

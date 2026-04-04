@@ -135,16 +135,16 @@
 ## 🎯 Milestone 3: Интеграция с OpenWeather API и бизнес-логика локаций
 
 ### 3.1 Сервис для работы с OpenWeather
-- [ ] Создать OpenWeatherService:
+- [✅] Создать OpenWeatherService:
   - searchLocations(String query) - поиск через Geocoding API
   - getWeather(double lat, double lon) - погода через Weather API
-- [ ] Использовать RestTemplate (бин из AppConfig)
+- [] Использовать RestTemplate (бин из AppConfig)
 - [ ] Добавить обработку ошибок (4xx, 5xx) и исключение OpenWeatherApiException
 
 ### 3.2 Тестирование OpenWeather сервиса
 - [ ] Создать мок для RestTemplate (MockRestServiceServer)
 - [ ] Написать тесты:
-  - Успешный поиск локаций (мок JSON ответа)
+  - Успешный поиск локаций (мок JSON ответа
   - Ошибка API -> OpenWeatherApiException
 
 ### 3.3 Бизнес-логика для локаций пользователя
@@ -159,7 +159,7 @@
 ## 🎯 Milestone 4: Контроллеры и Thymeleaf шаблоны (UI)
 
 ### 4.1 Подготовка фронтенда
-- [ ] Скопировать статические ресурсы (CSS, картинки) в src/main/webapp/resources/static/
+- [✅] Скопировать статические ресурсы (CSS, картинки) в src/main/webapp/resources/static/
 - [ ] Скопировать HTML макеты в src/main/webapp/WEB-INF/templates/
 - [ ] Переименовать .html файлы (home.html, search.html, login.html, register.html)
 
@@ -179,7 +179,7 @@
     - Вернуть search.html с результатами
 
 ### 4.4 Контроллеры для управления локациями
-- [ ] Создать LocationController:
+- [✅] Создать LocationController:
   - POST /locations/add — добавить локацию (редирект на главную)
   - POST /locations/delete/{id} — удалить локацию (редирект на главную)
 

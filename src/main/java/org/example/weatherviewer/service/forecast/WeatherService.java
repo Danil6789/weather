@@ -60,9 +60,16 @@ public class WeatherService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String json = response.body();
 
-            return objectMapper.readValue(json, WeatherResponse.class);
+            return ConvertToDegreesCelsius(objectMapper.readValue(json, WeatherResponse.class));
         }catch(Exception e){
             throw new RuntimeException("Ошибка: " + e.getMessage());
         }
+    }
+
+    private WeatherResponse ConvertToDegreesCelsius(WeatherResponse weatherResponse){
+        BigDecimal currentTemp = weatherResponse.getMain().getTemp();
+        BigDecimal oneKelvin = new BigDecimal("273.15");
+        weatherResponse.getMain().setTemp(currentTemp.subtract(oneKelvin));
+        return weatherResponse;
     }
 }

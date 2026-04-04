@@ -1,6 +1,5 @@
 package org.example.weatherviewer.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.entity.Location;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -8,9 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class LocationRepository {
-    private final SessionFactory sessionFactory;
+public class LocationRepository extends CrudRepository<Location> {
+
+    public LocationRepository(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 
     public List<Location> findLocationsByUserId(Long userId){
         return sessionFactory.getCurrentSession().createQuery("FROM Location WHERE user.id =:userId", Location.class)
@@ -18,6 +19,7 @@ public class LocationRepository {
                 .getResultList();
     }
 
+    @Override
     public void save(Location location){
         sessionFactory.getCurrentSession().persist(location);
     }

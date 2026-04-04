@@ -1,6 +1,5 @@
 package org.example.weatherviewer.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.DatabaseException;
 import org.example.weatherviewer.exception.UserAlreadyExistsException;
@@ -8,15 +7,18 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class UserRepository {
+public class UserRepository extends CrudRepository<User> {
 
-    private final SessionFactory sessionFactory;
+    public UserRepository(SessionFactory sessionFactory){
+        super(sessionFactory);
+    }
 
+    @Override
     public void save(User user) {
         try {
             sessionFactory.getCurrentSession().persist(user);

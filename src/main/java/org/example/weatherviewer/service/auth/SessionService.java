@@ -44,7 +44,7 @@
 
         @Transactional(readOnly = true)
         public User getUserBySessionId(UUID sessionId) {
-            Session session = sessionRepository.findBySessionId(sessionId)
+            Session session = sessionRepository.findById(sessionId)
                     .orElseThrow(() -> new SessionNotFoundException("Session not found"));
 
             checkAndDeleteIfExpired(session);

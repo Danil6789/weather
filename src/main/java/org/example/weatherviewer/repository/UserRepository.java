@@ -36,7 +36,7 @@ public class UserRepository {
     }
 
     public void update(User user) {
-        sessionFactory.getCurrentSession().merge(user);
+        sessionFactory.getCurrentSession().merge(user); //TODO: Посмотреть почему он никогда не используется может он не нужен или я зыбал его вписать куда-то
     }
 
     public List<User> findAll(){

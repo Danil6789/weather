@@ -5,14 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.weatherviewer.dto.weather.WeatherResponse;
 
-import java.math.BigDecimal;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ForecastDto {
-    private BigDecimal latitude;
-    private BigDecimal longitude;
-
+    private Long locationId;
     private WeatherResponse weather;
 }

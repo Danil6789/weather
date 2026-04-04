@@ -5,10 +5,8 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class LocationDto {
-    private Long id;
+public class LocationCreateDto {
     private String name;
-    private Long userId;
     private BigDecimal latitude;
     private BigDecimal longitude;
 }

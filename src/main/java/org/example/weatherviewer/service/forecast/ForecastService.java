@@ -20,7 +20,7 @@ public class ForecastService {
 
         return locations.stream().map(location -> {
             WeatherResponse weather = weatherService.getWeather(location.getLatitude(), location.getLongitude());
-            return new ForecastDto(location.getLatitude(), location.getLongitude(), weather);
+            return new ForecastDto(location.getId(), weather);
         }).collect(Collectors.toList());
     }
 }

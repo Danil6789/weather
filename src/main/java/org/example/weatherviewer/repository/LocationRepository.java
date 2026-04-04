@@ -21,4 +21,9 @@ public class LocationRepository {
     public void save(Location location){
         sessionFactory.getCurrentSession().persist(location);
     }
+
+    public int deleteByIdAndUserId(Long id, Long userId){
+        return sessionFactory.getCurrentSession().createMutationQuery("DELETE FROM Location WHERE id=:id AND user.id=:userId")
+                .setParameter("id", id).setParameter("userId", userId).executeUpdate();
+    }
 }

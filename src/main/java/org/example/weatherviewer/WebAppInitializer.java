@@ -9,11 +9,8 @@ import org.example.weatherviewer.config.WebConfig;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
@@ -45,5 +42,11 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
+
+
+
+        HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
+        container.addFilter("hiddenHttpMethodFilter", hiddenHttpMethodFilter)
+                .addMappingForServletNames(null, true, "dispatcher");
     }
 }

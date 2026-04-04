@@ -120,7 +120,7 @@ class SessionServiceTest {
         assertTrue(sessionRepository.findById(sessionId).isPresent());
 
         sessionService.deleteSession(sessionId);
-        sessionRepository.clearCash();
+        sessionRepository.clearCache();
 
         assertFalse(sessionRepository.findById(sessionId).isPresent());
     }

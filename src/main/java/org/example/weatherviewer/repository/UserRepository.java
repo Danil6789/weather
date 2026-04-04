@@ -1,10 +1,10 @@
 package org.example.weatherviewer.repository;
 
+import jakarta.persistence.EntityManager;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.DatabaseException;
 import org.example.weatherviewer.exception.UserAlreadyExistsException;
 import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +14,14 @@ import java.util.Optional;
 @Repository
 public class UserRepository extends CrudRepository<User> {
 
-    public UserRepository(SessionFactory sessionFactory){
-        super(sessionFactory);
+    public UserRepository(EntityManager entityManager){
+        super(entityManager);
     }
 
     @Override
     public void save(User user) {
         try {
-            sessionFactory.getCurrentSession().persist(user);
+            entityManager.persist(user);
         }catch (ConstraintViolationException e){
             throw new UserAlreadyExistsException("Пользователь с таким логином уже существует");
         }
@@ -31,18 +31,20 @@ public class UserRepository extends CrudRepository<User> {
     }
 
     public Optional<User> findByLogin(String login) {
-        return sessionFactory.getCurrentSession().
+        return entityManager.
                 createQuery("From User WHERE login = :login", User.class)
                 .setParameter("login", login)
-                .uniqueResultOptional();
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 
     public void update(User user) {
-        sessionFactory.getCurrentSession().merge(user); //TODO: Посмотреть почему он никогда не используется может он не нужен или я зыбал его вписать куда-то
+        entityManager.merge(user); //TODO: Посмотреть почему он никогда не используется может он не нужен или я зыбал его вписать куда-то
     }
 
     public List<User> findAll(){
-        return sessionFactory.getCurrentSession().createQuery("FROM User", User.class)
+        return entityManager.createQuery("FROM User", User.class)
                 .getResultList();
     }
 }

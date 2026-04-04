@@ -1,11 +1,16 @@
 package org.example.weatherviewer.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-@RequiredArgsConstructor
 public abstract class CrudRepository<T> {
-    protected final SessionFactory sessionFactory; //TODO: подумать мб нужно сделать через entityManager
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    public CrudRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     abstract public void save(T entity);
 }

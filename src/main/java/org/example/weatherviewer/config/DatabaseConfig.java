@@ -40,12 +40,14 @@ public class DatabaseConfig {
         return ds;
     }
 
-    @Bean(name = "hibernateProperties")
-    public Properties hibernateProperties() {
+    @Bean(name = "jpaProperties")
+    public Properties jpaProperties() {
         Properties props = new Properties();
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.setProperty("hibernate.show_sql", "true");
+        props.setProperty("hibernate.format_sql", "true");
         props.setProperty("hibernate.hbm2ddl.auto", "validate");
+        props.setProperty("hibernate.jdbc.batch_size", "20");
         return props;
     }
 }

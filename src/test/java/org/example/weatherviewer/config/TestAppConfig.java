@@ -28,8 +28,8 @@ public class TestAppConfig {
         return ds;
     }
 
-    @Bean(name = "hibernateProperties")
-    public Properties hibernateProperties() {
+    @Bean(name = "jpaProperties")
+    public Properties jpaProperties() {
         Properties props = new Properties();
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         props.setProperty("hibernate.show_sql", "true");

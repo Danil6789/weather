@@ -52,7 +52,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                     }
                 });
 
-        if (uri.equals("/search")) {
+        if (uri.equals("/search") || uri.startsWith("/locations")) {
             if (request.getAttribute("user") == null) {
                 redirectToLogin(request, response);
                 return false;

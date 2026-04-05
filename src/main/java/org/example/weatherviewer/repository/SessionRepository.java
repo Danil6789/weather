@@ -34,7 +34,7 @@ public class SessionRepository extends CrudRepository<Session>{
 
     public int deleteByExpiresAtBefore(LocalDateTime now){
         return entityManager
-                .createQuery("DELETE FROM Session WHERE expires_at < :now")
+                .createQuery("DELETE FROM Session WHERE expiresAt < :now")
                 .setParameter("now", now).executeUpdate();
     }
 

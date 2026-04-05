@@ -29,14 +29,16 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(@RequestParam(name = "redirect", required = false) String redirect, Model model) {
-        model.addAttribute("loginDto", new UserLoginDto());
+        model.addAttribute("userLoginDto", new UserLoginDto());
         model.addAttribute("redirect", redirect);
 
         return "login";
     }
+
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userRegisterDto", new UserRegisterDto());
+
         return "register";
     }
 
@@ -46,16 +48,16 @@ public class AuthController {
             return "register";
         }
         authService.register(userRegisterDto);
+
         return "redirect:/";
     }
 
     @PostMapping("/login")
-    public String login(@Valid UserLoginDto userLoginDto,
+    public String login(@Valid @ModelAttribute("userLoginDto") UserLoginDto userLoginDto,
                         BindingResult bindingResult,
                         @RequestParam(name = "redirect", required = false) String redirect,
                         HttpServletResponse response, Model model) {
-
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("redirect", redirect);
             return "login";
         }

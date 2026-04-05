@@ -42,7 +42,7 @@ public class UserService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //TODO: ПО сути этот метод не нужен никогда
     public List<User> getAll(){
         return userRepository.findAll();
     }

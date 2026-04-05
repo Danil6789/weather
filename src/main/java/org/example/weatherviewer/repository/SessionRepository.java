@@ -1,8 +1,11 @@
 package org.example.weatherviewer.repository;
 
 import jakarta.persistence.EntityManager;
-import org.hibernate.SessionFactory;
+import jakarta.validation.ConstraintViolationException;
+import org.example.weatherviewer.exception.DatabaseException;
+import org.example.weatherviewer.exception.SessionAlreadyExistsException;
 import org.example.weatherviewer.entity.Session;
+import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -18,24 +21,43 @@ public class SessionRepository extends CrudRepository<Session>{
 
     @Override
     public void save(Session session){
-        entityManager.persist(session);
+        try{
+            entityManager.persist(session);
+        }catch(ConstraintViolationException e){
+            throw new SessionAlreadyExistsException("Такая сессия уже существует");
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд", e);
+        }
     }
 
     public int deleteById(UUID sessionId) {
-        return entityManager
-                .createQuery("DELETE FROM Session WHERE id = :id")
-                .setParameter("id", sessionId)
-                .executeUpdate();
+        try{
+            return entityManager
+                    .createQuery("DELETE FROM Session WHERE id = :id")
+                    .setParameter("id", sessionId)
+                    .executeUpdate();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при удалении сессии", e);
+        }
     }
 
     public Optional<Session> findById(UUID id){
-        return Optional.ofNullable(entityManager.find(Session.class, id));
+        try{
+            return Optional.ofNullable(entityManager.find(Session.class, id));
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при поиске сессии", e);
+        }
     }
 
     public int deleteByExpiresAtBefore(LocalDateTime now){
-        return entityManager
-                .createQuery("DELETE FROM Session WHERE expiresAt < :now")
-                .setParameter("now", now).executeUpdate();
+        try{
+            return entityManager
+                    .createQuery("DELETE FROM Session WHERE expiresAt < :now")
+                    .setParameter("now", now).executeUpdate();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при удалении, когда истекла сессия", e);
+        }
+
     }
 
     public void clearCache() {

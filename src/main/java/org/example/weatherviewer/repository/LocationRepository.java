@@ -18,9 +18,13 @@ public class LocationRepository extends CrudRepository<Location> {
     }
 
     public List<Location> findLocationsByUserId(Long userId){
-        return entityManager.createQuery("FROM Location WHERE user.id =:userId", Location.class)
-                .setParameter("userId", userId)
-                .getResultList();
+        try{
+            return entityManager.createQuery("FROM Location WHERE user.id =:userId", Location.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при поиске локации", e);
+        }
     }
 
     @Override
@@ -30,12 +34,16 @@ public class LocationRepository extends CrudRepository<Location> {
         }catch(ConstraintViolationException e){
             throw new LocationAlreadyExistsException("Такая локация уже отслеживается");
         }catch(HibernateException e){
-            throw new DatabaseException("Ошибка в бд", e);
+            throw new DatabaseException("Ошибка в бд при добавлении локации", e);
         }
     }
 
     public int deleteByIdAndUserId(Long id, Long userId){
-        return entityManager.createQuery("DELETE FROM Location WHERE id=:id AND user.id=:userId")
-                .setParameter("id", id).setParameter("userId", userId).executeUpdate();
+        try{
+            return entityManager.createQuery("DELETE FROM Location WHERE id=:id AND user.id=:userId")
+                    .setParameter("id", id).setParameter("userId", userId).executeUpdate();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при удалении локации", e);
+        }
     }
 }

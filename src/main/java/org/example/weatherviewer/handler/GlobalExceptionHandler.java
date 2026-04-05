@@ -1,6 +1,7 @@
 package org.example.weatherviewer.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -17,8 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String handleUserAlreadyExists(UserAlreadyExistsException e,
                                           RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", e.getMessage());
-        redirectAttributes.addFlashAttribute("status", 409);
+        redirectAttributes.addFlashAttribute("error", "There is already a user with this login");
 
         return "redirect:/auth/register";
     }
@@ -46,33 +45,34 @@ public class GlobalExceptionHandler {
         return "redirect:/search";
     }
 
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public String handleUserNotFound(UserNotFoundException e, Model model) {
-        model.addAttribute("error", e.getMessage());
-        model.addAttribute("status", 404);
-        return "error/404";
-    }
-
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public String handleInvalidCredentials(InvalidCredentialsException e,
-                                           RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", e.getMessage());
-        return "redirect:/auth/login";
+    @ExceptionHandler({InvalidCredentialsException.class, UserNotFoundException.class})
+    public String handleInvalidCredentialsOrUserNotFound(Exception e, Model model) {
+        log.warn("error: " + e.getMessage());
+        model.addAttribute("error", "The login or password does not match");
+        model.addAttribute("loginDto", new UserLoginDto());
+        return "login";  // ← Прямой ответ, без редиректа
     }
 
     @ExceptionHandler(SessionExpiredException.class)
     public String handleSessionExpired(SessionExpiredException e,
                                        RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", "Сессия истекла. Пожалуйста, войдите снова.");
+        log.error("Unexpected error occurred", e);
+        redirectAttributes.addFlashAttribute("error", "An internal server error occurred");
         return "redirect:/auth/login";
+    }
+
+    @ExceptionHandler(SessionAlreadyExistsException.class)
+    public String handleSessionAlreadyExistsException(Exception e, Model model) {
+        log.error("Unexpected error occurred", e);
+        model.addAttribute("error", "An internal server error occurred");
+        return "error/409";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleGenericError(Exception e, Model model) {
         log.error("Unexpected error occurred", e);
         e.printStackTrace();
-        model.addAttribute("error", "Произошла внутренняя ошибка сервера");
+        model.addAttribute("error", "An internal server error occurred");
         model.addAttribute("status", 500);
         return "error/500";
     }

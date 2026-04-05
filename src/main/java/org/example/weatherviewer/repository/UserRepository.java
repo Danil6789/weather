@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.exception.DatabaseException;
 import org.example.weatherviewer.exception.UserAlreadyExistsException;
+import org.example.weatherviewer.exception.UserNotFoundException;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
@@ -31,16 +32,24 @@ public class UserRepository extends CrudRepository<User> {
     }
 
     public Optional<User> findByLogin(String login) {
-        return entityManager.
-                createQuery("From User WHERE login=:login", User.class)
-                .setParameter("login", login)
-                .getResultList()
-                .stream()
-                .findFirst();
+        try{
+            return entityManager.
+                    createQuery("From User WHERE login=:login", User.class)
+                    .setParameter("login", login)
+                    .getResultList()
+                    .stream()
+                    .findFirst();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при поиске пользователя с таким логином", e);
+        }
     }
 
-    public List<User> findAll(){
-        return entityManager.createQuery("FROM User", User.class)
-                .getResultList();
+    public List<User> findAll(){ //TODO: Этот метод не нужен по сути кроме тестов
+        try{
+            return entityManager.createQuery("FROM User", User.class)
+                    .getResultList();
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд при поиске всех пользователей", e);
+        }
     }
 }

@@ -2,7 +2,10 @@ package org.example.weatherviewer.repository;
 
 import jakarta.persistence.EntityManager;
 import org.example.weatherviewer.entity.Location;
-import org.hibernate.SessionFactory;
+import org.example.weatherviewer.exception.DatabaseException;
+import org.example.weatherviewer.exception.LocationAlreadyExistsException;
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,7 +25,13 @@ public class LocationRepository extends CrudRepository<Location> {
 
     @Override
     public void save(Location location){
-        entityManager.persist(location);
+        try{
+            entityManager.persist(location);
+        }catch(ConstraintViolationException e){
+            throw new LocationAlreadyExistsException("Такая локация уже отслеживается");
+        }catch(HibernateException e){
+            throw new DatabaseException("Ошибка в бд", e);
+        }
     }
 
     public int deleteByIdAndUserId(Long id, Long userId){

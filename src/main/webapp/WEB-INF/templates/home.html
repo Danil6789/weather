@@ -39,22 +39,38 @@
                         <div class="delete-btn">
                             <form method="post" th:action="@{'/locations/' + ${forecast.locationId}}">
                                 <input type="hidden" name="_method" value="DELETE">
-                                <button class="btn btn-sm btn-outline-danger rounded-circle" type="submit" title="Delete">
-                                    ✕
-                                </button>
+                                <button class="btn btn-sm btn-outline-danger rounded-circle" type="submit" title="Delete">✕</button>
                             </form>
                         </div>
+
                         <img class="card-img-top img-fluid p-3"
                              th:src="@{'https://openweathermap.org/img/wn/' + ${forecast.weather.weather[0].icon} + '@4x.png'}"
                              alt="Weather icon"
                              style="width: 100px; height: 100px; margin: 0 auto;">
+
                         <div class="card-body text-center">
-                            <h1 class="card-text display-4" th:text="${forecast.weather.main.temp} + '°C'">7°C</h1>
-                            <h3 class="card-title" th:text="${forecast.weather.name}">Tbilisi</h3>
-                            <p class="card-text text-muted" th:text="${forecast.weather.weather[0].description}">Clear sky</p>
-                            <p class="card-text small">
-                                💧 Humidity: <span th:text="${forecast.weather.main.humidity}"></span>%
+                            <h3 class="card-title" th:text="${forecast.weather.name}"></h3>
+
+                            <h1 class="card-text display-4" th:text="${forecast.weather.main.temp} + '°C'"></h1>
+
+                            <p class="card-text">
+                                Feels like: <span th:text="${forecast.weather.main.feelsLike} + '°C'"></span>
                             </p>
+
+                            <p class="card-text text-muted" th:text="${forecast.weather.weather[0].description}"></p>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="small mb-1">Humidity</p>
+                                    <p class="small fw-bold" th:text="${forecast.weather.main.humidity} + '%'"></p>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <p class="small mb-1">Wind</p>
+                                    <p class="small fw-bold" th:text="${forecast.weather.wind.speed} + ' m/s'"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

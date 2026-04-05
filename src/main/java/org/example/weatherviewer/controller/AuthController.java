@@ -8,14 +8,14 @@ import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.service.auth.AuthService;
 import org.example.weatherviewer.util.CookieUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,14 +25,17 @@ public class AuthController {
     private final AuthService authService;
     private final CookieUtil cookieUtil;
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String login(@RequestParam(name = "redirect", required = false) String redirect, Model model) {
         model.addAttribute("loginDto", new UserLoginDto());
+        model.addAttribute("redirect", redirect);
+
         return "login";
     }
-
     @GetMapping("/register")
-    public String registerPage(Model model) {
+    public String register(Model model) {
         model.addAttribute("userRegisterDto", new UserRegisterDto());
         return "register";
     }
@@ -43,20 +46,29 @@ public class AuthController {
             return "register";
         }
         authService.register(userRegisterDto);
-
         return "redirect:/";
     }
 
     @PostMapping("/login")
-    public String login(
-            @Valid UserLoginDto userLoginDto, BindingResult bindingResult,
-            HttpServletResponse response)
-    {
+    public String login(@Valid UserLoginDto userLoginDto,
+                        BindingResult bindingResult,
+                        @RequestParam(name = "redirect", required = false) String redirect,
+                        HttpServletResponse response, Model model) {
+
         if(bindingResult.hasErrors()){
+            model.addAttribute("redirect", redirect);
             return "login";
         }
+
         SessionDto sessionDto = authService.login(userLoginDto);
         cookieUtil.setSessionCookie(response, sessionDto.getId().toString());
+
+        if (redirect != null && !redirect.isEmpty()) {
+            String decodedRedirect = java.net.URLDecoder.decode(redirect, StandardCharsets.UTF_8);
+            log.info("Redirecting to: {}", decodedRedirect);
+            return "redirect:" + decodedRedirect;
+        }
+
         return "redirect:/";
     }
 
@@ -70,6 +82,6 @@ public class AuthController {
             authService.logout(UUID.fromString(sessionId));
         }
         cookieUtil.deleteSessionCookie(response);
-        return "redirect: login";
+        return "redirect:/auth/login";
     }
 }

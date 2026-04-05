@@ -23,6 +23,8 @@
                     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
                     <form th:action="@{/auth/login}" method="post" th:object="${loginDto}">
+                        <input type="hidden" name="redirect" th:value="${redirect}">
+
                         <div class="mb-3">
                             <label class="form-label">Login</label>
                             <input type="text" th:field="*{login}" class="form-control" required>

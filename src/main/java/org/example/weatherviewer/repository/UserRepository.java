@@ -32,15 +32,11 @@ public class UserRepository extends CrudRepository<User> {
 
     public Optional<User> findByLogin(String login) {
         return entityManager.
-                createQuery("From User WHERE login = :login", User.class)
+                createQuery("From User WHERE login=:login", User.class)
                 .setParameter("login", login)
                 .getResultList()
                 .stream()
                 .findFirst();
-    }
-
-    public void update(User user) {
-        entityManager.merge(user); //TODO: Посмотреть почему он никогда не используется может он не нужен или я зыбал его вписать куда-то
     }
 
     public List<User> findAll(){

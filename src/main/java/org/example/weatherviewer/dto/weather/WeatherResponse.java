@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 
@@ -29,7 +30,22 @@ public class WeatherResponse {
         @JsonProperty("feels_like")
         private BigDecimal feelsLike;
         private Integer humidity;
-        private Integer pressure;
+
+        @JsonProperty("feels_like")
+        public void setFeelsLike(BigDecimal feelsLike) {
+            this.feelsLike = convertKelvinToCelsius(feelsLike);
+        }
+
+        @JsonProperty("temp")
+        public void setTemp(BigDecimal temp) {
+            this.temp = convertKelvinToCelsius(temp);
+        }
+
+        private BigDecimal convertKelvinToCelsius(BigDecimal kelvin) {
+            if (kelvin == null) return null;
+            return kelvin.subtract(new BigDecimal("273.15"))
+                    .setScale(1, RoundingMode.HALF_UP);
+        }
     }
 
     @Data

@@ -1,4 +1,5 @@
 package org.example.weatherviewer.handler;
+
 import org.example.weatherviewer.exception.InvalidCredentialsException;
 import org.example.weatherviewer.exception.SessionExpiredException;
 import org.example.weatherviewer.exception.UserAlreadyExistsException;
@@ -12,15 +13,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String handleUserAlreadyExists(UserAlreadyExistsException e,
                                           RedirectAttributes redirectAttributes) {
-        log.warn("Registration failed: {}", e.getMessage());
         redirectAttributes.addFlashAttribute("error", e.getMessage());
-        return "redirect:/register";
+        redirectAttributes.addFlashAttribute("status", 409);
+
+        return "redirect:/auth/register";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -36,7 +37,7 @@ public class GlobalExceptionHandler {
                                            RedirectAttributes redirectAttributes) {
         log.warn("Invalid credentials: {}", e.getMessage());
         redirectAttributes.addFlashAttribute("error", e.getMessage());
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
     @ExceptionHandler(SessionExpiredException.class)
@@ -44,13 +45,13 @@ public class GlobalExceptionHandler {
                                        RedirectAttributes redirectAttributes) {
         log.warn("Session expired: {}", e.getMessage());
         redirectAttributes.addFlashAttribute("error", "Сессия истекла. Пожалуйста, войдите снова.");
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleGenericError(Exception e, Model model) {
-        log.error("Unexpected error occurred", e);  // ← это уже есть
-        e.printStackTrace();  // ← ДОБАВЬ ЭТО! Ошибка напечатается в консоль Tomcat
+        log.error("Unexpected error occurred", e);
+        e.printStackTrace();
         model.addAttribute("error", "Произошла внутренняя ошибка сервера");
         model.addAttribute("status", 500);
         return "error/500";

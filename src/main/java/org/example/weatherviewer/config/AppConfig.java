@@ -2,7 +2,6 @@ package org.example.weatherviewer.config;
 
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @ComponentScan(
         basePackages = "org.example.weatherviewer",

@@ -5,7 +5,7 @@ import jakarta.persistence.PersistenceContext;
 
 public abstract class CrudRepository<T> {
 
-    @PersistenceContext
+    @PersistenceContext //TODO: Мб лучше сделать без этого
     protected EntityManager entityManager;
 
     public CrudRepository(EntityManager entityManager) {

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.auth.UserSessionDto;
+import org.example.weatherviewer.entity.User;
 import org.example.weatherviewer.mapper.UserMapper;
 import org.example.weatherviewer.service.auth.SessionService;
 import org.example.weatherviewer.util.CookieUtil;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -27,7 +31,9 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        System.out.println(">>> SessionInterceptor works for: " + request.getRequestURI());
+        String uri = request.getRequestURI();
+        System.out.println(">>> SessionInterceptor works for: " + uri);
+
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return true;
@@ -38,13 +44,37 @@ public class SessionInterceptor implements HandlerInterceptor {
                 .ifPresent(cookie -> {
                     try {
                         UUID sessionId = UUID.fromString(cookie.getValue());
-                        UserSessionDto userSessionDto = userMapper.toUserSessionDto(sessionService.getUserBySessionId(sessionId));
+                        User user = sessionService.getUserBySessionId(sessionId);
+                        UserSessionDto userSessionDto = userMapper.toUserSessionDto(user);
                         request.setAttribute("user", userSessionDto);
                     } catch (Exception e) {
                         cookieUtil.deleteSessionCookie(response);
                     }
                 });
 
+        if (uri.equals("/search")) {
+            if (request.getAttribute("user") == null) {
+                redirectToLogin(request, response);
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String requestURI = request.getRequestURI();
+            String queryString = request.getQueryString();
+
+            String redirectUrl = requestURI;
+            if (queryString != null && !queryString.isEmpty()) {
+                redirectUrl += "?" + queryString;
+            }
+            String encodedUrl = URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8);
+            response.sendRedirect("/auth/login?redirect=" + encodedUrl);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

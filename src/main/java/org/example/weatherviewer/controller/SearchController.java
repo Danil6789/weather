@@ -13,7 +13,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class WeatherController { //TODO: Мб переименовать в SearchController надо подумать над этим как будет лучше
+public class SearchController {
     private final WeatherService weatherService;
 
     @GetMapping("/search")

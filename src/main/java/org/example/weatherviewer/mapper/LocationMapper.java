@@ -3,7 +3,6 @@ package org.example.weatherviewer.mapper;
 import org.example.weatherviewer.dto.location.LocationCreateDto;
 import org.example.weatherviewer.dto.location.LocationDto;
 import org.example.weatherviewer.entity.Location;
-import org.example.weatherviewer.entity.User;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public interface LocationMapper {
     List<LocationDto> toDtoList(List<Location> locations);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user.id", source = "userId")  // ← прямо указываем
+    @Mapping(target = "user.id", source = "userId")
     Location toEntity(LocationCreateDto createDto, Long userId);
 
 }

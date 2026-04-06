@@ -11,6 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         }
 )
 @Configuration
-@EnableScheduling //TODO: это нужно будет убрать если делать через ScheduleExecutorService
+@EnableScheduling
 public class AppConfig {
 }

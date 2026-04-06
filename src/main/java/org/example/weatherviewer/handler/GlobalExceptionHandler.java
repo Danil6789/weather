@@ -71,7 +71,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleGenericError(Exception e, Model model) {
         log.error("Unexpected error occurred", e);
-        e.printStackTrace();
         model.addAttribute("error", "An internal server error occurred");
         model.addAttribute("status", 500);
         return "error/500";

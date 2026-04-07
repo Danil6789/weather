@@ -1,13 +1,13 @@
 package org.example.weatherviewer.service;
 
 import org.example.weatherviewer.config.TestAppConfig;
-import org.example.weatherviewer.dto.auth.UserRegisterDto;
-import org.example.weatherviewer.entity.Session;
-import org.example.weatherviewer.entity.User;
-import org.example.weatherviewer.exception.session.SessionNotFoundException;
-import org.example.weatherviewer.repository.SessionRepository;
-import org.example.weatherviewer.service.auth.SessionService;
-import org.example.weatherviewer.service.auth.UserService;
+import org.example.weatherviewer.auth.user.dto.UserRegisterDto;
+import org.example.weatherviewer.auth.session.Session;
+import org.example.weatherviewer.auth.user.User;
+import org.example.weatherviewer.auth.session.exception.SessionNotFoundException;
+import org.example.weatherviewer.auth.session.SessionRepository;
+import org.example.weatherviewer.auth.session.SessionService;
+import org.example.weatherviewer.auth.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

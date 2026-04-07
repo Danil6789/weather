@@ -4,8 +4,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
-import org.example.weatherviewer.config.AppConfig;
-import org.example.weatherviewer.config.WebConfig;
+import org.example.weatherviewer.common.config.AppConfig;
+import org.example.weatherviewer.common.config.WebConfig;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -27,18 +27,11 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     @Override
     public void onStartup(ServletContext container) throws ServletException {
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(AppConfig.class);
-        container.addListener(new ContextLoaderListener(rootContext));
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class); // оба конфига
 
-        AnnotationConfigWebApplicationContext servletContext = new AnnotationConfigWebApplicationContext();
-        servletContext.setParent(rootContext);
-
-        servletContext.register(WebConfig.class);
-
-        DispatcherServlet dispatcherSevlet = new DispatcherServlet(servletContext);
-        ServletRegistration.Dynamic registration = container.addServlet("dispatcher", dispatcherSevlet);
-
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
+        ServletRegistration.Dynamic registration = container.addServlet("dispatcher", dispatcherServlet);
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
 

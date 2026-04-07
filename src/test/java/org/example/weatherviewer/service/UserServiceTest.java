@@ -1,13 +1,13 @@
     package org.example.weatherviewer.service;
 
     import org.example.weatherviewer.config.TestAppConfig;
-    import org.example.weatherviewer.dto.auth.UserRegisterDto;
-    import org.example.weatherviewer.entity.User;
-    import org.example.weatherviewer.exception.common.InvalidCredentialsException;
-    import org.example.weatherviewer.exception.user.UserAlreadyExistsException;
-    import org.example.weatherviewer.exception.user.UserNotFoundException;
-    import org.example.weatherviewer.repository.UserRepository;
-    import org.example.weatherviewer.service.auth.UserService;
+    import org.example.weatherviewer.auth.user.dto.UserRegisterDto;
+    import org.example.weatherviewer.auth.user.User;
+    import org.example.weatherviewer.auth.user.exception.InvalidCredentialsException;
+    import org.example.weatherviewer.auth.user.exception.UserAlreadyExistsException;
+    import org.example.weatherviewer.auth.user.exception.UserNotFoundException;
+    import org.example.weatherviewer.auth.user.UserRepository;
+    import org.example.weatherviewer.auth.user.UserService;
     import org.junit.jupiter.api.DisplayName;
     import org.junit.jupiter.api.Test;
     import org.junit.jupiter.api.extension.ExtendWith;

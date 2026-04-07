@@ -2,11 +2,11 @@ package org.example.weatherviewer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.weatherviewer.config.TestAppConfig;
-import org.example.weatherviewer.dto.weather.GeocodingResponse;
-import org.example.weatherviewer.exception.weather.WeatherApiInterruptException;
-import org.example.weatherviewer.exception.weather.WeatherApiNetworkException;
-import org.example.weatherviewer.exception.weather.WeatherApiResponseException;
-import org.example.weatherviewer.service.forecast.WeatherService;
+import org.example.weatherviewer.forecast.weather.dto.GeocodingResponse;
+import org.example.weatherviewer.forecast.weather.exception.WeatherApiInterruptException;
+import org.example.weatherviewer.forecast.weather.exception.WeatherApiNetworkException;
+import org.example.weatherviewer.forecast.weather.exception.WeatherApiResponseException;
+import org.example.weatherviewer.forecast.weather.WeatherService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

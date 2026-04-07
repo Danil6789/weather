@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({InvalidCredentialsException.class, UserNotFoundException.class})
     public String handleInvalidCredentialsOrUserNotFound(Exception e, Model model) {
         model.addAttribute("error", "The login or password does not match");
-        model.addAttribute("loginDto", new UserLoginDto());
+        model.addAttribute("userLoginDto", new UserLoginDto());
 
         return "login";
     }

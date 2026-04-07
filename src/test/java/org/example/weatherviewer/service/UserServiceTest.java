@@ -3,9 +3,9 @@
     import org.example.weatherviewer.config.TestAppConfig;
     import org.example.weatherviewer.dto.auth.UserRegisterDto;
     import org.example.weatherviewer.entity.User;
-    import org.example.weatherviewer.exception.InvalidCredentialsException;
-    import org.example.weatherviewer.exception.UserAlreadyExistsException;
-    import org.example.weatherviewer.exception.UserNotFoundException;
+    import org.example.weatherviewer.exception.common.InvalidCredentialsException;
+    import org.example.weatherviewer.exception.user.UserAlreadyExistsException;
+    import org.example.weatherviewer.exception.user.UserNotFoundException;
     import org.example.weatherviewer.repository.UserRepository;
     import org.example.weatherviewer.service.auth.UserService;
     import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,6 @@
     @ContextConfiguration(classes = {TestAppConfig.class})
     @ExtendWith(SpringExtension.class)
     class UserServiceTest {
-
         @Autowired
         private UserRepository userRepository;
         @Autowired

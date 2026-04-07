@@ -2,9 +2,8 @@ package org.example.weatherviewer.repository;
 
 import jakarta.persistence.EntityManager;
 import org.example.weatherviewer.entity.User;
-import org.example.weatherviewer.exception.DatabaseException;
-import org.example.weatherviewer.exception.UserAlreadyExistsException;
-import org.example.weatherviewer.exception.UserNotFoundException;
+import org.example.weatherviewer.exception.common.DatabaseException;
+import org.example.weatherviewer.exception.user.UserAlreadyExistsException;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
@@ -14,7 +13,6 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository extends CrudRepository<User> {
-
     public UserRepository(EntityManager entityManager){
         super(entityManager);
     }
@@ -44,7 +42,7 @@ public class UserRepository extends CrudRepository<User> {
         }
     }
 
-    public List<User> findAll(){ //TODO: Этот метод не нужен по сути кроме тестов
+    public List<User> findAll(){
         try{
             return entityManager.createQuery("FROM User", User.class)
                     .getResultList();

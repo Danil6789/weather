@@ -1,11 +1,8 @@
 package org.example.weatherviewer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.interceptor.SessionInterceptor;
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,7 +18,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 @RequiredArgsConstructor
 @Profile("!test")
 public class WebConfig implements WebMvcConfigurer {
-
     private final SessionInterceptor sessionInterceptor;
 
     @Override
@@ -55,8 +51,6 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setCharacterEncoding("UTF-8");
         return resolver;
     }
-
-
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")

@@ -9,17 +9,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherResponse {
     private String name;
-
     private Main main;
-
     private List<Weather> weather;
-
     private Wind wind;
 
     @Data

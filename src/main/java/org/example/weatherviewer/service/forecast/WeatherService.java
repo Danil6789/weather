@@ -4,9 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.weather.GeocodingResponse;
 import org.example.weatherviewer.dto.weather.WeatherResponse;
+import org.example.weatherviewer.exception.weather.WeatherApiException;
+import org.example.weatherviewer.exception.weather.WeatherApiInterruptException;
+import org.example.weatherviewer.exception.weather.WeatherApiNetworkException;
+import org.example.weatherviewer.exception.weather.WeatherApiResponseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,9 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
-
-    //TODO: HttpClient надо сделать полем и бином в AppConfig чтоб можно было замокать его в тестах и использовать(Я не совсем в этом разобрался, оставил на потом)
-
+    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     @Value("${openweather.api.key}")
@@ -36,40 +39,33 @@ public class WeatherService {
     }
 
     public List<GeocodingResponse> searchLocations(String name) {
-        System.out.println("In searchLocations apikey:" + apiKey);
-        try(HttpClient client = HttpClient.newHttpClient()){
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(getUrlGeocoding(name)))
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String json = response.body();
-
-            GeocodingResponse[] responses = objectMapper.readValue(json, GeocodingResponse[].class);
-
-            return Arrays.asList(responses);
-        }catch(Exception e){
-            throw new RuntimeException("Ошибка: " + e.getMessage());
-        }
+        String url = getUrlGeocoding(name);
+        GeocodingResponse[] responses = executeRequest(url, GeocodingResponse[].class);
+        return Arrays.asList(responses);
     }
 
-    public WeatherResponse getWeather(BigDecimal lat, BigDecimal lon){
-        try(HttpClient client = HttpClient.newHttpClient()){
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(getUrlCurrentWeather(lat, lon)))
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String json = response.body();
-
-            return objectMapper.readValue(json, WeatherResponse.class);
-        }catch(Exception e){
-            throw new RuntimeException("Ошибка: " + e.getMessage());
-        }
+    public WeatherResponse getWeather(BigDecimal lat, BigDecimal lon) {
+        String url = getUrlCurrentWeather(lat, lon);
+        return executeRequest(url, WeatherResponse.class);
     }
 
-//    private WeatherResponse ConvertToDegreesCelsius(WeatherResponse weatherResponse){
-//        BigDecimal currentTemp = weatherResponse.getMain().getTemp();
-//        BigDecimal oneKelvin = new BigDecimal("273.15");
-//        weatherResponse.getMain().setTemp(currentTemp.subtract(oneKelvin));
-//        return weatherResponse;
-//    }
+    private <T> T executeRequest(String url, Class<T> responseType) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new WeatherApiResponseException("Error request api");
+            }
+
+            return objectMapper.readValue(response.body(), responseType);
+        } catch (IOException e) {
+            throw new WeatherApiNetworkException("Connection error to OpenWeather API");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new WeatherApiInterruptException("Request was interrupted");
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package org.example.weatherviewer.exception;
+package org.example.weatherviewer.exception.location;
 
 public class LocationNotFoundException extends RuntimeException {
     public LocationNotFoundException(String message) {

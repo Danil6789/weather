@@ -4,7 +4,7 @@ import org.example.weatherviewer.config.TestAppConfig;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.entity.Session;
 import org.example.weatherviewer.entity.User;
-import org.example.weatherviewer.exception.SessionNotFoundException;
+import org.example.weatherviewer.exception.session.SessionNotFoundException;
 import org.example.weatherviewer.repository.SessionRepository;
 import org.example.weatherviewer.service.auth.SessionService;
 import org.example.weatherviewer.service.auth.UserService;

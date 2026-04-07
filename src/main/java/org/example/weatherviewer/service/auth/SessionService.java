@@ -3,7 +3,7 @@
     import lombok.RequiredArgsConstructor;
     import org.example.weatherviewer.entity.Session;
     import org.example.weatherviewer.entity.User;
-    import org.example.weatherviewer.exception.SessionNotFoundException;
+    import org.example.weatherviewer.exception.session.SessionNotFoundException;
     import org.example.weatherviewer.repository.SessionRepository;
     import org.springframework.beans.factory.annotation.Value;
     import org.springframework.scheduling.annotation.Scheduled;
@@ -16,9 +16,9 @@
     @RequiredArgsConstructor
     @Service
     public class SessionService {
-
-        @Value("${session.timeout.hours:2}")
+        @Value("${session.timeout.hours:24}")
         private int sessionTimeoutHours;
+
         @Value("${session.sliding.window.minutes:30}")
         private int slidingWindowMinutes;
 
@@ -54,12 +54,11 @@
         }
 
         @Transactional
-        @Scheduled(fixedRateString = "#{${session.timeout.hours:2}*3600000}") //TODO: Подумать над тем, что может стоит использовать ScheduleExecutorService как советует Сергуй Жуков
+        @Scheduled(fixedRateString = "#{${session.timeout.hours:24}*3600000}")
         public void cleanupExpiredSession(){
             LocalDateTime now = LocalDateTime.now();
-            int line = sessionRepository.deleteByExpiresAtBefore(now); //TODO: мб какую-то проверку сделать или что-то типо того
+            sessionRepository.deleteByExpiresAtBefore(now);
         }
-
 
         private void checkAndDeleteIfExpired(Session session) {
             LocalDateTime now = LocalDateTime.now();

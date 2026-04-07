@@ -11,8 +11,15 @@
 <div th:replace="~{fragments/header :: navbar}"></div>
 
 <div class="container py-4">
+
+    <div th:if="${errorConn}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error</strong>
+        <span th:text="${errorConn}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <div th:if="${locations.isEmpty()}" class="alert alert-warning">
-        По запросу "<span th:text="${queryName}"></span>"
+        По запросу "<span th:text="${queryName}"></span>" ничего не найдено
     </div>
     <div class="row">
         <div class="col-md-4 col-lg-3 mb-4" th:each="location : ${locations}">

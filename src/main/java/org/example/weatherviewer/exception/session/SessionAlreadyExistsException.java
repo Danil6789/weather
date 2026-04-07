@@ -1,4 +1,4 @@
-package org.example.weatherviewer.exception;
+package org.example.weatherviewer.exception.session;
 
 public class SessionAlreadyExistsException extends RuntimeException {
     public SessionAlreadyExistsException(String message) {

@@ -3,7 +3,7 @@ package org.example.weatherviewer.service.forecast;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherviewer.dto.location.LocationCreateDto;
 import org.example.weatherviewer.dto.location.LocationDto;
-import org.example.weatherviewer.exception.LocationNotFoundException;
+import org.example.weatherviewer.exception.location.LocationNotFoundException;
 import org.example.weatherviewer.mapper.LocationMapper;
 import org.example.weatherviewer.repository.LocationRepository;
 import org.springframework.stereotype.Service;

@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class FlywayConfig {
-
     @Autowired
     private DataSource dataSource;
 

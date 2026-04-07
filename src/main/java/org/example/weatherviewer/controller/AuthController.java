@@ -8,8 +8,6 @@ import org.example.weatherviewer.dto.auth.UserLoginDto;
 import org.example.weatherviewer.dto.auth.UserRegisterDto;
 import org.example.weatherviewer.service.auth.AuthService;
 import org.example.weatherviewer.util.CookieUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +22,6 @@ import java.util.UUID;
 public class AuthController {
     private final AuthService authService;
     private final CookieUtil cookieUtil;
-
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("/login")
     public String login(@RequestParam(name = "redirect", required = false) String redirect, Model model) {
@@ -67,7 +63,6 @@ public class AuthController {
 
         if (redirect != null && !redirect.isEmpty()) {
             String decodedRedirect = java.net.URLDecoder.decode(redirect, StandardCharsets.UTF_8);
-            log.info("Redirecting to: {}", decodedRedirect);
             return "redirect:" + decodedRedirect;
         }
 
@@ -84,6 +79,7 @@ public class AuthController {
             authService.logout(UUID.fromString(sessionId));
         }
         cookieUtil.deleteSessionCookie(response);
+
         return "redirect:/auth/login";
     }
 }

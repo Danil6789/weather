@@ -1,4 +1,4 @@
-package org.example.weatherviewer.exception;
+package org.example.weatherviewer.exception.session;
 
 public class SessionExpiredException extends RuntimeException {
     public SessionExpiredException(String message) {

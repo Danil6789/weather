@@ -30,5 +30,4 @@ public class Location {
 
     @Column(name="longitude", nullable = false)
     private BigDecimal longitude;
-
 }

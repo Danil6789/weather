@@ -2,8 +2,8 @@ package org.example.weatherviewer.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
-import org.example.weatherviewer.exception.DatabaseException;
-import org.example.weatherviewer.exception.SessionAlreadyExistsException;
+import org.example.weatherviewer.exception.common.DatabaseException;
+import org.example.weatherviewer.exception.session.SessionAlreadyExistsException;
 import org.example.weatherviewer.entity.Session;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Repository
 public class SessionRepository extends CrudRepository<Session>{
-
     public SessionRepository(EntityManager entityManager){
         super(entityManager);
     }

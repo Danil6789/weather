@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.net.http.HttpClient;
+
 @ComponentScan(
         basePackages = "org.example.weatherviewer",
         excludeFilters = {
@@ -17,5 +19,11 @@ public class AppConfig {
         @Bean
         public ObjectMapper objectMapper() {
                 return new ObjectMapper();
+        }
+
+        @Bean(destroyMethod = "close")
+        @Profile("!test")
+        public HttpClient httpClient(){
+                return HttpClient.newHttpClient();
         }
 }

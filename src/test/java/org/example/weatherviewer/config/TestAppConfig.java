@@ -11,7 +11,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.net.http.HttpClient;
 import java.util.Properties;
+
+import static org.mockito.Mockito.mock;
 
 @Configuration
 @ComponentScan(
@@ -22,16 +25,16 @@ public class TestAppConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             DataSource dataSource, @Qualifier("jpaProperties") Properties jpaProperties) {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
-        em.setPackagesToScan("org.example.weatherviewer.entity");
+        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
+        entityManager.setDataSource(dataSource);
+        entityManager.setPackagesToScan("org.example.weatherviewer.entity");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabasePlatform("org.hibernate.dialect.H2Dialect");
-        em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(jpaProperties);
+        entityManager.setJpaVendorAdapter(vendorAdapter);
+        entityManager.setJpaProperties(jpaProperties);
 
-        return em;
+        return entityManager;
     }
 
     @Bean
@@ -48,13 +51,13 @@ public class TestAppConfig {
 
     @Bean
     public DataSource testDataSource() {
-        HikariDataSource ds = new HikariDataSource();
-        ds.setDriverClassName("org.h2.Driver");
-        ds.setJdbcUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
-        ds.setUsername("sa");
-        ds.setPassword("");
-        ds.setMaximumPoolSize(2);
-        return ds;
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setJdbcUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
+        dataSource.setMaximumPoolSize(2);
+        return dataSource;
     }
 
     @Bean(name = "jpaProperties")
@@ -64,5 +67,10 @@ public class TestAppConfig {
         props.setProperty("hibernate.show_sql", "true");
         props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         return props;
+    }
+
+    @Bean(name = "mockHttpClient")
+    public HttpClient mockHttpClient() {
+        return mock(HttpClient.class);
     }
 }

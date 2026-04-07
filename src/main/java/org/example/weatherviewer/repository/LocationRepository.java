@@ -2,8 +2,8 @@ package org.example.weatherviewer.repository;
 
 import jakarta.persistence.EntityManager;
 import org.example.weatherviewer.entity.Location;
-import org.example.weatherviewer.exception.DatabaseException;
-import org.example.weatherviewer.exception.LocationAlreadyExistsException;
+import org.example.weatherviewer.exception.common.DatabaseException;
+import org.example.weatherviewer.exception.location.LocationAlreadyExistsException;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public class LocationRepository extends CrudRepository<Location> {
-
     public LocationRepository(EntityManager entityManager) {
         super(entityManager);
     }

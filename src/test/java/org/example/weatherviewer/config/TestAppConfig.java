@@ -27,7 +27,7 @@ public class TestAppConfig {
             DataSource dataSource, @Qualifier("jpaProperties") Properties jpaProperties) {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource);
-        entityManager.setPackagesToScan("org.example.weatherviewer.entity");
+        entityManager.setPackagesToScan("org.example.weatherviewer");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabasePlatform("org.hibernate.dialect.H2Dialect");

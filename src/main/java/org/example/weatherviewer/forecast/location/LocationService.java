@@ -21,7 +21,7 @@ public class LocationService {
     }
 
     @Transactional
-    public void addLocation(LocationCreateDto locationDto, Long userId ){
+    public void addLocation(LocationCreateDto locationDto, Long userId){
         locationRepository.save(locationMapper.toEntity(locationDto, userId));
     }
 

@@ -7,6 +7,7 @@ import org.example.weatherviewer.forecast.location.LocationService;
 import org.example.weatherviewer.forecast.weather.WeatherService;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +22,14 @@ public class ForecastService {
         List<LocationDto> locations = locationService.getUserLocations(userId);
 
         return locations.stream()
-                .sorted(Comparator.comparing(LocationDto::getId).reversed())
-                .map(location -> {
-                    WeatherResponse weather = weatherService.getWeather(location.getLatitude(), location.getLongitude());
-                    return new ForecastDto(location.getId(), weather);
+                .map(locationDto -> {
+                    WeatherResponse weather = weatherService.getWeather(locationDto.getLatitude(), locationDto.getLongitude());
+                    weather.setName(locationDto.getName());
+                    return new ForecastDto(
+                            locationDto.getId(),
+                            locationDto.getLongitude().setScale(4, RoundingMode.HALF_UP),
+                            locationDto.getLatitude().setScale(4, RoundingMode.HALF_UP),
+                            weather);
                 })
                 .collect(Collectors.toList());
     }

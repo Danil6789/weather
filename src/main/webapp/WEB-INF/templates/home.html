@@ -20,6 +20,11 @@
             right: 10px;
             z-index: 10;
         }
+        .coordinates {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +55,11 @@
 
                         <div class="card-body text-center">
                             <h3 class="card-title" th:text="${forecast.weather.name}"></h3>
+
+                            <!-- Координаты -->
+                            <div class="coordinates">
+                                <span th:text="${forecast.latitude} + ', ' + ${forecast.longitude}"></span>
+                            </div>
 
                             <h1 class="card-text display-4" th:text="${forecast.weather.main.temp} + '°C'"></h1>
 

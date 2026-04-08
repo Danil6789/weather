@@ -31,7 +31,7 @@ public class DatabaseConfig {
     private String dbPassword;
 
     @Bean
-    public DataSource prodDataSource() {
+    public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
         ds.setJdbcUrl(dbUrl);
@@ -53,6 +53,7 @@ public class DatabaseConfig {
     }
 
     @Bean
+    @DependsOn("flyway")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             DataSource dataSource, @Qualifier("jpaProperties") Properties jpaProperties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();

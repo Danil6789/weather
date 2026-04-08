@@ -13,13 +13,15 @@ public class FlywayConfig {
     @Autowired
     private DataSource dataSource;
 
-    @Bean(initMethod = "migrate")
+    @Bean
     @Profile("!test")
     public Flyway flyway(){
-        return Flyway.configure()
+        Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migration")
                 .baselineOnMigrate(true)
                 .load();
+        flyway.migrate();
+        return flyway;
     }
 }

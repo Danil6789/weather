@@ -12,7 +12,6 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-//@ComponentScan({"org.example.weatherviewer.controller", "org.example.weatherviewer.handler"})
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor

@@ -84,3 +84,76 @@ Converts a city name to geographic coordinates (latitude, longitude).
 
 ```http
 GET http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=YOUR_API_KEY
+```
+### Response Example
+
+```json
+[
+  {
+    "name": "London",
+    "country": "GB",
+    "lat": 51.5073219,
+    "lon": -0.1276474,
+    "state": "England"
+  },
+  {
+    "name": "London",
+    "country": "CA",
+    "lat": 42.9832406,
+    "lon": -81.243372,
+    "state": "Ontario"
+  }
+]
+```
+### Response Fields
+
+| Field | Description |
+|-------|-------------|
+| `name` | City name |
+| `country` | Country code (ISO 3166) |
+| `lat` | Latitude |
+| `lon` | Longitude |
+| `state` | State/province (if applicable) |
+
+### Request Example
+
+```http
+GET https://api.openweathermap.org/data/2.5/weather?lat=51.5073&lon=-0.1276&units=metric&appid=YOUR_API_KEY
+```
+
+### Response Example
+
+```json
+{
+  "main": {
+    "temp": 15.5,
+    "feels_like": 14.2,
+    "humidity": 76
+  },
+  "weather": [
+    {
+      "id": 801,
+      "main": "Clouds",
+      "description": "few clouds",
+      "icon": "02d"
+    }
+  ],
+  "wind": {
+    "speed": 3.6,
+    "deg": 240
+  },
+  "name": "London"
+}
+```
+
+### Response Fields
+
+| Field | Description |
+|-------|-------------|
+| `main.temp` | Current temperature (Celsius when `units=metric`) |
+| `main.feels_like` | Human perception of weather |
+| `main.humidity` | Humidity percentage |
+| `weather[0].description` | Weather condition description |
+| `weather[0].icon` | Icon code (for weather icon URL) |
+| `wind.speed` | Wind speed (m/s when `units=metric`) |
+| `name` | City name (from geocoding) |

@@ -19,10 +19,13 @@ public class LocationRepository extends CrudRepository<Location> {
     public List<Location> findLocationsByUserId(Long userId){
         try{
             return entityManager.createQuery(
-                            "FROM Location WHERE user.id = :userId ORDER BY id DESC", Location.class)
+                            "SELECT DISTINCT l FROM Location l " +
+                                    "JOIN FETCH l.user " +
+                                    "WHERE l.user.id = :userId " +
+                                    "ORDER BY l.id DESC", Location.class)
                     .setParameter("userId", userId)
                     .getResultList();
-        }catch(HibernateException e){
+        } catch(HibernateException e){
             throw new DatabaseException("Ошибка в бд при поиске локации", e);
         }
     }

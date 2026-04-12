@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 public class LocationDto {
     private Long id;
     private String name;
-    private Long userId;
     private BigDecimal latitude;
     private BigDecimal longitude;
 }

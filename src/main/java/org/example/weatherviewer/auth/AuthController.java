@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
-    private final CookieUtil cookieUtil;
+    private final CookieManager cookieUtil;
 
     @GetMapping("/login")
     public String login(@RequestParam(name = "redirect", required = false) String redirect, Model model) {

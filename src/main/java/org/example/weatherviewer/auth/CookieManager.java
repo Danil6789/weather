@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CookieUtil {
+public class CookieManager {
 
     @Value("${session.cookie.id}")
     private String COOKIE_NAME = "SESSION_ID";

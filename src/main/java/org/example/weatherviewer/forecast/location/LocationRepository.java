@@ -19,10 +19,7 @@ public class LocationRepository extends CrudRepository<Location> {
     public List<Location> findLocationsByUserId(Long userId){
         try{
             return entityManager.createQuery(
-                            "SELECT DISTINCT l FROM Location l " +
-                                    "JOIN FETCH l.user " +
-                                    "WHERE l.user.id = :userId " +
-                                    "ORDER BY l.id DESC", Location.class)
+                            "SELECT l FROM Location l WHERE l.user.id = :userId ORDER BY l.id DESC", Location.class)
                     .setParameter("userId", userId)
                     .getResultList();
         } catch(HibernateException e){

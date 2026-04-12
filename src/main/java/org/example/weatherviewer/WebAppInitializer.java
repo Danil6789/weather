@@ -5,12 +5,16 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
 import org.example.weatherviewer.common.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 public class WebAppInitializer implements WebApplicationInitializer {
+
+    private static final Logger log = LoggerFactory.getLogger(WebAppInitializer.class);
 
     static {
         try {
@@ -22,23 +26,22 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
             if (apiKey != null) {
                 System.setProperty("OPENWEATHER_API_KEY", apiKey);
-                System.out.println("OPENWEATHER_API_KEY loaded: " + apiKey);
+                log.info("OPENWEATHER_API_KEY loaded: {}", maskSecret(apiKey));
             }
 
             if (dbUsername != null) {
                 System.setProperty("DB_USERNAME", dbUsername);
-                System.out.println("DB_USERNAME loaded: " + dbUsername);
+                log.info("DB_USERNAME loaded: {}", dbUsername);
             }
 
             if (dbPassword != null) {
                 System.setProperty("DB_PASSWORD", dbPassword);
-                System.out.println("DB_PASSWORD loaded: ");
+                log.info("DB_PASSWORD loaded: {}", maskSecret(dbPassword));
             }
 
         } catch (Exception e) {
-            System.err.println("Error loading .env file: " + e.getMessage());
+            log.error("Error loading .env file: {}", e.getMessage(), e);
         }
-
     }
 
     @Override
@@ -56,5 +59,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
         HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
         container.addFilter("hiddenHttpMethodFilter", hiddenHttpMethodFilter)
                 .addMappingForServletNames(null, true, "dispatcher");
+    }
+
+    private static String maskSecret(String secret) {
+        if (secret == null || secret.length() <= 8) {
+            return "***";
+        }
+        return secret.substring(0, 4) + "***" + secret.substring(secret.length() - 4);
     }
 }

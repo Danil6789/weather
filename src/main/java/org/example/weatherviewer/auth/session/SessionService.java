@@ -40,7 +40,7 @@
             }
         }
 
-        @Transactional(readOnly = true)
+        @Transactional
         public User getUserBySessionId(UUID sessionId) {
             Session session = sessionRepository.findById(sessionId)
                     .orElseThrow(() -> new SessionNotFoundException("Session not found"));

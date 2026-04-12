@@ -8,7 +8,7 @@ import org.example.weatherviewer.auth.user.dto.UserSessionDto;
 import org.example.weatherviewer.auth.user.User;
 import org.example.weatherviewer.auth.user.UserMapper;
 import org.example.weatherviewer.auth.session.SessionService;
-import org.example.weatherviewer.auth.CookieUtil;
+import org.example.weatherviewer.auth.CookieManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SessionInterceptor implements HandlerInterceptor {
     private final SessionService sessionService;
-    private final CookieUtil cookieUtil;
+    private final CookieManager cookieUtil;
     private final UserMapper userMapper;
 
     @Value("${session.cookie.id}")
